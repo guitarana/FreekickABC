@@ -260,6 +260,7 @@ public class GameManager : MonoBehaviour {
 //
 //		GUI.Label(new Rect(Screen.width-110,80,100,30),"Wind");
 //		hWindValue = GUI.HorizontalSlider(new Rect(Screen.width-110,110,100,30),hWindValue,-25,25);
+		
 		}
 	}
 
