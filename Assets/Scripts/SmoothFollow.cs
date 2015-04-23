@@ -31,11 +31,13 @@ public class SmoothFollow : MonoBehaviour
 	public bool isDamping;
 	public float fov;
 	private Camera mainCam;
+	public Transform target2;
 
 
 	void Start(){
 		mainCam = GetComponent<Camera> ();
 		fov = mainCam.fieldOfView;
+		target2 = GameManager.instance.goal;
 	}
 
 	void  LateUpdate ()
@@ -43,44 +45,36 @@ public class SmoothFollow : MonoBehaviour
 		// Early out if we don't have a target
 		if (!target)
 			return;
-		
-		// Calculate the current rotation angles
-		float wantedRotationAngle = target.eulerAngles.y;
-		float wantedHeight = target.position.y + height;
-		float currentRotationAngle = transform.eulerAngles.y;
-		float currentHeight = transform.position.y;
-		
-		// Damp the rotation around the y-axis
-		currentRotationAngle = Mathf.LerpAngle (currentRotationAngle, wantedRotationAngle, rotationDamping * Time.deltaTime);
-		
-		// Damp the height
-		currentHeight = Mathf.Lerp (currentHeight, wantedHeight, heightDamping * Time.deltaTime);
-		
-		// Convert the angle into a rotation
-		Quaternion currentRotation = Quaternion.Euler (0, currentRotationAngle, 0);
-		
-		// Set the position of the camera on the x-z plane to:
-		// distance meters behind the target
-//		transform.position = target.position;
-//		transform.position -= currentRotation * Vector3.forward * distance;
-		
-		// Set the height of the camera
 
-		// Always look at the target
-		//transform.LookAt (target);
 		if (isDamping) {
-			transform.position = Vector3.Lerp(transform.position,new Vector3(target.position.x, height, target.position.z),Time.deltaTime);
+			transform.localPosition = Vector3.Lerp(transform.localPosition,new Vector3(target.localPosition.x, height, target.localPosition.z),Time.deltaTime);
 
 			if (fov <= 90){
 				fov += Time.deltaTime*50;
-				distance += Time.deltaTime*10;
 
 			}
+
 		} else {
-			fov = 60;
-			distance = 10;
+			transform.LookAt(GameManager.instance.goal.transform);
+			transform.position = GetDesiredPosition();
+			if (fov >= 60){
+				fov -= Time.deltaTime*50;
+			}
 		}
 
 		mainCam.fieldOfView = fov;
+	}
+
+	float a,b,c,d;
+	public Vector3 GetDesiredPosition(){
+		c=distance;
+		a = Mathf.Abs(target.position.z-target2.position.z);
+		d = Mathf.Abs((target.position.x)-target2.position.x);
+		b = (a/d)*(c);
+		Debug.Log("a: "+a);
+		Debug.Log("b: "+b);
+		Debug.Log("d: "+d);
+
+		return Vector3.Lerp(transform.position,new Vector3(target.position.x +c, target.position.y +7, target.position.z-b),Time.deltaTime*2);
 	}
 }

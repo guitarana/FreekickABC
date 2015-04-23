@@ -17,7 +17,7 @@ public class GoalKeeperAI : MonoBehaviour
 		Jockey
 	}
 
-	public AIState aiState = new AIState();
+	public AIState aiState = AIState.None;
 
 	public enum SubState{
 		Init,
@@ -26,7 +26,7 @@ public class GoalKeeperAI : MonoBehaviour
 		Finish
 	}
 
-	public SubState substate = new SubState();
+	public SubState substate = SubState.Init;
 
 	public Animation anim;
 	// Use this for initialization
@@ -37,16 +37,37 @@ public class GoalKeeperAI : MonoBehaviour
 
 	}
 
+	void DoNone(){
+
+		if(substate == SubState.Init){
+			gameObject.SetActive(false);
+		}
+
+		if(substate == SubState.Active){
+			
+		}
+
+		if(substate == SubState.Deactive){
+			
+		}
+
+		if(substate == SubState.Finish){
+			
+		}
+
+	}
+
 	void DoIdle(){
 
 		if (substate == SubState.Init) {
+			gameObject.SetActive(true);
 			substate = SubState.Active;
 		}
 
 		if (substate == SubState.Active) {
 			if(!ball)
 				ball = GameManager.instance.ball;
-			if(GameManager.instance.flyBall){
+			if(GameState.instance.isFlyBall){
 				substate = SubState.Deactive;
 			}
 		}
@@ -136,6 +157,9 @@ public class GoalKeeperAI : MonoBehaviour
 
 	void UpdateState(){
 		switch (aiState) {
+		case AIState.None :
+			DoNone();
+			break;
 		case AIState.Idle :
 			DoIdle();
 			break;
