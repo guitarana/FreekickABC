@@ -19,6 +19,9 @@ public class Bullseye : MonoBehaviour
 	public bool isMoving;
 	private Vector3 desiredPosition;
 
+	public float multiplierScore;
+	public Transform center;
+
 
 	// Use this for initialization
 	void Start ()
@@ -59,6 +62,33 @@ public class Bullseye : MonoBehaviour
 
 	void Warp(){
 		gameObject.transform.position = new Vector3(transform.position.x,Random.Range(initPos.y,goalHeight),Random.Range(initPos.z,goalLenght));
+	}
+
+
+	float ScoreChecker(){
+	
+		if(Vector3.Distance(center.position,GameManager.instance.ball.transform.position)<=1.28f){
+			return 100;
+		}
+
+		if(Vector3.Distance(center.position,GameManager.instance.ball.transform.position)>1.28f && Vector3.Distance(center.position,GameManager.instance.ball.transform.position)<=3f){
+			return 50;
+		}
+
+		if(Vector3.Distance(center.position,GameManager.instance.ball.transform.position)>3f && Vector3.Distance(center.position,GameManager.instance.ball.transform.position)<=4.7f){
+			return 25;
+		}
+
+		return 0;
+
+	}
+
+	void OnTriggerEnter(Collider other) 
+	{
+		if(other.gameObject.tag == "Ball"){
+			multiplierScore = ScoreChecker();
+			Debug.Log("MultiplierScore " + multiplierScore);
+		}
 	}
 
 //	int GetScore(){

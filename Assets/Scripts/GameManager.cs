@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour {
 
 	//DECLARING VARIABLES TO USE
 	public static GameManager instance;
-	public SmoothFollow mainCamera;
+	public CameraManager mainCamera;
 	public GameObject ball; //THE CURRENT BALL THAT IS BEING USED
 	public GameObject ballTemp; 
 	public GoalKeeperAI keeper;
@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour {
 
 
 	public int goalCounter=0;
-	public int score;
+	public float score;
 	public int maxGoal;
 	public int ballStock = 15;
 	public float timer=0;
@@ -126,7 +126,8 @@ public class GameManager : MonoBehaviour {
 		if(substate == SubState.Init){
 			keeper.gameObject.SetActive(false);
 			bullseye.gameObject.SetActive(true);
-			bullseye.state = Bullseye.State.Dynamic;
+			bullseye.state = Bullseye.State.Static;
+			bullseye.isWarp = true;
 			maxTime = 300;//seconds
 			substate = SubState.Active;
 		}
@@ -141,6 +142,7 @@ public class GameManager : MonoBehaviour {
 		if(substate == SubState.Deactive){
 			if(GameState.instance.isGoal){
 				goalCounter +=1;
+				score = bullseye.multiplierScore + score;
 				substate = SubState.Finish;
 			}
 			
@@ -151,7 +153,9 @@ public class GameManager : MonoBehaviour {
 		}
 		
 		if(substate == SubState.Finish){
-			
+			if(GameState.instance.isEnableControl){
+				substate = SubState.Init;
+			}
 		}
 		
 	}
