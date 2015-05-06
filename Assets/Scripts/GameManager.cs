@@ -40,6 +40,9 @@ public class GameManager : MonoBehaviour {
 		instance = this;
 		Physics.IgnoreLayerCollision(8,8); //IGNORE BALLS COLLIDING WITH OTHER BALLS
 		Reset ();
+		if(UIManager.instance.state == UIManager.State.Arcade) gameMode = GameMode.Arcade;
+		if(UIManager.instance.state == UIManager.State.TimeAttack) gameMode = GameMode.TimeAttack;
+		if(UIManager.instance.state == UIManager.State.OneBall) gameMode = GameMode.OneBall;
 		//createAnotherBall(); //CREATE A BALL TO START WITH
 	}
 
@@ -57,6 +60,7 @@ public class GameManager : MonoBehaviour {
 	public int maxGoal;
 	public int ballStock = 15;
 	public float timer=0;
+	private float timer2=0;
 	public float maxTime;
 
 	void DoArcade(){
@@ -146,15 +150,23 @@ public class GameManager : MonoBehaviour {
 				substate = SubState.Finish;
 			}
 			
-			if(!GameState.instance.isFlyBall){
+//			if(!GameState.instance.isFlyBall){
+//				substate = SubState.Finish;
+//			}
+
+			timer2 +=Time.deltaTime;
+			if(timer2>2){
 				substate = SubState.Finish;
 			}
 
 		}
 		
 		if(substate == SubState.Finish){
+			timer2 =0;
+			Reset();
 			if(GameState.instance.isEnableControl){
 				substate = SubState.Init;
+
 			}
 		}
 		
@@ -229,8 +241,9 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void Reset(){
-		if(ball)
+		if(ball){
 			Destroy (ball);
+		}
 		ball = Instantiate(ballTemp);
 		ball.GetComponent<Rigidbody> ().isKinematic = true; 
 

@@ -26,6 +26,7 @@ public class CameraManager : MonoBehaviour
 	public float heightDamping = 2.0f;
 	public float rotationDamping = 3.0f;
 	public bool isDamping;
+	public bool isStop;
 	public float fov;
 	private Camera mainCam;
 	public Transform target2;
@@ -42,6 +43,8 @@ public class CameraManager : MonoBehaviour
 		// Early out if we don't have a target
 		if (!target)
 			return;
+		if(GameState.instance.isCameraStatic)
+			isStop = true;
 
 		if (isDamping) {
 			transform.localPosition = Vector3.Lerp(transform.localPosition,new Vector3(target.localPosition.x, height, target.localPosition.z),Time.deltaTime);
@@ -50,12 +53,18 @@ public class CameraManager : MonoBehaviour
 				fov += Time.deltaTime*50;
 
 			}
+			if(Vector3.Distance(transform.position,GameManager.instance.goal.transform.position)<15){
+				GameState.instance.isCameraDamping = false;
+				isStop = true;
+			}
 
 		} else {
-			transform.LookAt(GameManager.instance.goal.transform);
-			transform.position = GetDesiredPosition();
-			if (fov >= 60){
-				fov -= Time.deltaTime*50;
+			if(!isStop){
+				transform.LookAt(GameManager.instance.goal.transform);
+				transform.position = GetDesiredPosition();
+				if (fov >= 60){
+					fov -= Time.deltaTime*50;
+				}
 			}
 		}
 
