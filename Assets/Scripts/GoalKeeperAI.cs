@@ -179,7 +179,7 @@ public class GoalKeeperAI : MonoBehaviour
 	void UpdateAnimation(){
 		switch (aiState) {
 		case AIState.Idle :
-			anim.CrossFade("Idle");
+			anim.CrossFade("Idle",0);
 			break;
 		case AIState.Jockey :
 			anim.CrossFade("Idle");

@@ -128,7 +128,7 @@ public class GameManager : MonoBehaviour {
 		timer += Time.deltaTime;
 
 		if(substate == SubState.Init){
-			keeper.gameObject.SetActive(false);
+			keeper.gameObject.SetActive(true);
 			bullseye.gameObject.SetActive(true);
 			bullseye.state = Bullseye.State.Static;
 			bullseye.isWarp = true;
@@ -147,6 +147,7 @@ public class GameManager : MonoBehaviour {
 			if(GameState.instance.isGoal){
 				goalCounter +=1;
 				score = bullseye.multiplierScore + score;
+				timer2 =0;
 				substate = SubState.Finish;
 			}
 			
@@ -155,15 +156,20 @@ public class GameManager : MonoBehaviour {
 //			}
 
 			timer2 +=Time.deltaTime;
-			if(timer2>2){
+			if(timer2>1){
+				timer2 =0;
 				substate = SubState.Finish;
 			}
 
 		}
 		
 		if(substate == SubState.Finish){
-			timer2 =0;
-			Reset();
+
+			timer2 +=Time.deltaTime;
+			if(timer2>1){
+				Reset();
+			}
+
 			if(GameState.instance.isEnableControl){
 				substate = SubState.Init;
 
@@ -216,6 +222,7 @@ public class GameManager : MonoBehaviour {
 	void Update () {
 		UpdateGameMode();
 		UpdateState ();
+		UpdateStat();
 	
 	}
 
@@ -235,6 +242,12 @@ public class GameManager : MonoBehaviour {
 	#endregion
 
 	#region function
+
+	void UpdateStat(){
+		InGameUIManager.instance.scoreText.text = score.ToString();
+		InGameUIManager.instance.timeText.text  = timer.ToString();
+		InGameUIManager.instance.goalText.text  = goalCounter.ToString();
+	}
 
 	void LevelUp(){
 		//play animation & play cinematic...
