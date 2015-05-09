@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Ball : MonoBehaviour
 {
-	
+	bool blocked = false;
 	// Use this for initialization
 	void Start ()
 	{
@@ -14,6 +14,22 @@ public class Ball : MonoBehaviour
 	void Update ()
 	{
 	
+	}
+
+	void OnCollisionEnter(Collision collision) {
+		foreach (ContactPoint contact in collision.contacts) {
+			Debug.DrawRay(contact.point, contact.normal, Color.white);
+		}
+//		if (collision.relativeVelocity.magnitude > 2)
+//			audio.Play();
+
+		if(collision.collider.gameObject.tag == "keeper"){
+			if(!blocked){
+				blocked = true;
+				GameManager.instance.blockedCounter +=1;
+			}
+
+		}
 	}
 
 	public void ResetVelocity(){

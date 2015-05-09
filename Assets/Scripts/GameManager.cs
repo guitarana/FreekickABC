@@ -54,14 +54,16 @@ public class GameManager : MonoBehaviour {
 			ball.transform.LookAt(goal.transform.position);
 	}
 
-
+	public int shotCounter=0;
 	public int goalCounter=0;
+	public int blockedCounter=0;
+	public int bonus=0;
 	public float score;
 	public int maxGoal;
 	public int ballStock = 15;
 	public float timer=0;
 	private float timer2=0;
-	public float maxTime;
+	public float maxTime = 60;
 
 	void DoArcade(){
 
@@ -69,7 +71,8 @@ public class GameManager : MonoBehaviour {
 			keeper.gameObject.SetActive(true);
 			bullseye.gameObject.SetActive(false);
 
-			maxGoal = 15;
+
+			maxGoal = PlayerStatistic.instance.xpRemaining;
 			substate = SubState.Active;
 		}
 
@@ -77,6 +80,7 @@ public class GameManager : MonoBehaviour {
 
 
 			if(GameState.instance.isFlyBall){
+				shotCounter +=1;
 				ballStock -=1;
 				substate = SubState.Deactive;
 			}
@@ -88,27 +92,34 @@ public class GameManager : MonoBehaviour {
 			if(GameState.instance.isGoal){
 				ballStock +=1;
 				goalCounter +=1;
+				score = goalCounter*10;
+				timer2 =0;
 				substate = SubState.Finish;
 			}
 
-			if(!GameState.instance.isFlyBall){
+			timer2 +=Time.deltaTime;
+			if(timer2>1){
+				timer2 =0;
 				substate = SubState.Finish;
 			}
-
 
 		}
 
 		if(substate == SubState.Finish){
 			if(goalCounter==maxGoal){
-				StartCoroutine(BeginLevelUp());
+				PlayerStatistic.instance.xpGain = PlayerStatistic.instance.xpGain+goalCounter;
 				goalCounter = 0;
+				StartCoroutine(BeginLevelUp());
 			}
 
 			if(ballStock == 0){
-				//gameover
+				InGameUIManager.instance.inGameState = InGameUIManager.InGameState.GameOver;
 			}
 			
-			if(GameState.instance.isEnableControl){
+			timer2 +=Time.deltaTime;
+			if(timer2>1){
+				timer2 =0;
+				Reset();
 				substate = SubState.Init;
 			}
 
@@ -121,7 +132,7 @@ public class GameManager : MonoBehaviour {
 	void DoTimeAttack(){
 
 		if(timer>=maxTime){
-			//gameover
+			InGameUIManager.instance.inGameState = InGameUIManager.InGameState.GameOver;
 			timer =0;
 		}
 
@@ -139,6 +150,7 @@ public class GameManager : MonoBehaviour {
 		if(substate == SubState.Active){
 
 			if(GameState.instance.isFlyBall){
+				shotCounter +=1;
 				substate = SubState.Deactive;
 			}
 		}
@@ -167,13 +179,11 @@ public class GameManager : MonoBehaviour {
 
 			timer2 +=Time.deltaTime;
 			if(timer2>1){
+				timer2 =0;
 				Reset();
-			}
-
-			if(GameState.instance.isEnableControl){
 				substate = SubState.Init;
-
 			}
+
 		}
 		
 	}
@@ -245,8 +255,56 @@ public class GameManager : MonoBehaviour {
 
 	void UpdateStat(){
 		InGameUIManager.instance.scoreText.text = score.ToString();
-		InGameUIManager.instance.timeText.text  = timer.ToString();
+		if(gameMode == GameMode.Arcade)
+			InGameUIManager.instance.timeText.text  = ballStock.ToString();
+		if(gameMode == GameMode.TimeAttack)
+			InGameUIManager.instance.timeText.text  = Mathf.RoundToInt(maxTime-timer).ToString();
+		if(gameMode == GameMode.OneBall)
+			InGameUIManager.instance.timeText.text  = Mathf.RoundToInt(maxTime-timer).ToString();
+
 		InGameUIManager.instance.goalText.text  = goalCounter.ToString();
+		InGameUIManager.instance.startLevelText        .text = PlayerStatistic.instance.chart.ToString();
+		InGameUIManager.instance.startTargetText       .text = PlayerStatistic.instance.targetScore.ToString();
+		InGameUIManager.instance.startYourScoreText    .text = score.ToString();
+		InGameUIManager.instance.pauseLevelText        .text = PlayerStatistic.instance.chart.ToString();
+		
+		if(GameManager.instance.gameMode == GameMode.Arcade)
+			InGameUIManager.instance.pauseHighScoreText    .text = PlayerStatistic.instance.highScoreArcade.ToString();
+		if(GameManager.instance.gameMode == GameMode.TimeAttack)
+			InGameUIManager.instance.pauseHighScoreText    .text = PlayerStatistic.instance.highScoreTimeAttack.ToString();
+		if(GameManager.instance.gameMode == GameMode.OneBall)
+			InGameUIManager.instance.pauseHighScoreText    .text = PlayerStatistic.instance.highScoreOneBall.ToString();
+		
+		InGameUIManager.instance.pauseYourScoreText    .text = score.ToString();
+		InGameUIManager.instance.pauseShotsText        .text = shotCounter.ToString();
+		InGameUIManager.instance.pauseGoalsText        .text = goalCounter.ToString();
+		if(shotCounter!=0)
+			InGameUIManager.instance.pauseSuccessText      .text = ((goalCounter/shotCounter)*100).ToString();
+		InGameUIManager.instance.pauseGoalKeeperText   .text = blockedCounter.ToString();
+		InGameUIManager.instance.winLevelText          .text = PlayerStatistic.instance.globalLevel.ToString();
+		InGameUIManager.instance.winTargetText         .text = PlayerStatistic.instance.targetScore.ToString();
+		InGameUIManager.instance.winYourScoreText      .text = score.ToString();
+		InGameUIManager.instance.loseLevelText         .text = PlayerStatistic.instance.globalLevel.ToString();
+		InGameUIManager.instance.loseTargetText        .text = PlayerStatistic.instance.targetScore.ToString();
+		InGameUIManager.instance.loseYourScoreText     .text = score.ToString();
+		InGameUIManager.instance.gameOverLevelText     .text = PlayerStatistic.instance.chart.ToString();
+		
+		if(GameManager.instance.gameMode == GameMode.Arcade)
+			InGameUIManager.instance.gameOverHighScoreText .text = PlayerStatistic.instance.highScoreArcade.ToString();
+		if(GameManager.instance.gameMode == GameMode.TimeAttack)
+			InGameUIManager.instance.gameOverHighScoreText .text = PlayerStatistic.instance.highScoreTimeAttack.ToString();
+		if(GameManager.instance.gameMode == GameMode.OneBall)
+			InGameUIManager.instance.gameOverHighScoreText .text = PlayerStatistic.instance.highScoreOneBall.ToString();
+		
+		InGameUIManager.instance.gameOverYourScoreText .text = score.ToString();
+		InGameUIManager.instance.gameOverShotsText     .text = shotCounter.ToString();
+		InGameUIManager.instance.gameOverGoalsText     .text = goalCounter.ToString();
+		if(shotCounter!=0)
+			InGameUIManager.instance.gameOverSuccessText   .text = ((goalCounter/shotCounter)*100).ToString();
+		InGameUIManager.instance.gameOverBonusText     .text = bonus.ToString();
+		InGameUIManager.instance.gameOverGoalKeeperText.text = blockedCounter.ToString();
+		InGameUIManager.instance.gameOverXPGained      .text = PlayerStatistic.instance.xpGain.ToString();
+
 	}
 
 	void LevelUp(){
@@ -262,6 +320,7 @@ public class GameManager : MonoBehaviour {
 
 		mainCamera.target = ball.transform;
 		mainCamera.isDamping = false;
+		mainCamera.isStop = false;
 
 		ball.GetComponent<Rigidbody> ().isKinematic = true; 
 		ball.transform.position = initialPos.position;

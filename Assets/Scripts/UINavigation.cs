@@ -47,6 +47,8 @@ public class UINavigation : MonoBehaviour {
 
 	public void GoStartGame(){
 		InGameUIManager.instance.inGameState = InGameUIManager.InGameState.BeginGame;
+		InGameUIManager.instance.substate = InGameUIManager.SubState.Init;
+
 	}
 
 	public void GoHome(){
@@ -58,10 +60,13 @@ public class UINavigation : MonoBehaviour {
 		GameManager.instance.score = 0;
 		GameManager.instance.timer = 0;
 		GameManager.instance.goalCounter = 0;
+		InGameUIManager.instance.inGameState = InGameUIManager.InGameState.BeginGame;
+		InGameUIManager.instance.substate = InGameUIManager.SubState.Init;
 	}
 
 	public void GoPause(){
 		InGameUIManager.instance.inGameState = InGameUIManager.InGameState.PauseGame;
+		InGameUIManager.instance.substate = InGameUIManager.SubState.Init;
 	}
 
 }

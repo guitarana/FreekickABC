@@ -33,10 +33,47 @@ public class InGameUIManager : MonoBehaviour
 	public GameObject panelLoseGame;
 	public GameObject panelGameOver;
 
+	//InGameHUD
 	public UILabel goalText;
 	public UILabel timeText;
 	public UILabel scoreText;
 	public UILabel kreditText;
+	public UILabel labelText;
+
+	//StartHUD
+	public UILabel startLevelText;
+	public UILabel startTargetText;
+	public UILabel startYourScoreText;
+
+	//PauseHUD
+	public UILabel pauseLevelText;
+	public UILabel pauseHighScoreText;
+	public UILabel pauseYourScoreText;
+	public UILabel pauseShotsText;
+	public UILabel pauseGoalsText;
+	public UILabel pauseSuccessText;
+	public UILabel pauseGoalKeeperText;
+
+	//WinsHUD
+	public UILabel winLevelText;
+	public UILabel winTargetText;
+	public UILabel winYourScoreText;
+
+	//LoseHUD
+	public UILabel loseLevelText;
+	public UILabel loseTargetText;
+	public UILabel loseYourScoreText;
+
+	//GameOverHUD
+	public UILabel gameOverLevelText;
+	public UILabel gameOverHighScoreText;
+	public UILabel gameOverYourScoreText;
+	public UILabel gameOverShotsText;
+	public UILabel gameOverGoalsText;
+	public UILabel gameOverSuccessText;
+	public UILabel gameOverBonusText;
+	public UILabel gameOverGoalKeeperText;
+	public UILabel gameOverXPGained;
 
 	// Use this for initialization
 	void Start ()
@@ -70,7 +107,17 @@ public class InGameUIManager : MonoBehaviour
 		
 		if(substate == SubState.Init){
 			DisableAllPanel();
+			if(UIManager.instance.state == UIManager.State.Arcade)
+				labelText.text = "Ball";
+			if(UIManager.instance.state == UIManager.State.TimeAttack)
+				labelText.text = "Time";
+			if(UIManager.instance.state == UIManager.State.OneBall){
+			
+			}
+
+			PlayerStatistic.instance.SaveGame();
 			panelStartGame.SetActive(true);
+			substate = SubState.Active;
 		}
 		
 		if(substate == SubState.Active){
@@ -91,6 +138,7 @@ public class InGameUIManager : MonoBehaviour
 		
 		if(substate == SubState.Init){
 			DisableAllPanel();
+			PlayerStatistic.instance.SaveGame();
 			panelInGame.SetActive(true);
 		}
 		
@@ -112,6 +160,7 @@ public class InGameUIManager : MonoBehaviour
 		
 		if(substate == SubState.Init){
 			DisableAllPanel();
+			PlayerStatistic.instance.SaveGame();
 			panelPauseGame.SetActive(true);
 		}
 		
@@ -133,6 +182,7 @@ public class InGameUIManager : MonoBehaviour
 		
 		if(substate == SubState.Init){
 			DisableAllPanel();
+			PlayerStatistic.instance.SaveGame();
 			panelWinGame.SetActive(true);
 		}
 		
@@ -154,6 +204,7 @@ public class InGameUIManager : MonoBehaviour
 		
 		if(substate == SubState.Init){
 			DisableAllPanel();
+			PlayerStatistic.instance.SaveGame();
 			panelLoseGame.SetActive(true);
 		}
 		
@@ -175,6 +226,7 @@ public class InGameUIManager : MonoBehaviour
 		
 		if(substate == SubState.Init){
 			DisableAllPanel();
+			PlayerStatistic.instance.SaveGame();
 			panelGameOver.SetActive(true);
 		}
 		

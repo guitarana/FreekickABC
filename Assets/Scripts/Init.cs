@@ -8,6 +8,7 @@ public class Init : MonoBehaviour
 	void Start ()
 	{
 		UIManager.instance.Create();
+		PlayerStatistic.instance.Create();
 	}
 	
 	// Update is called once per frame
