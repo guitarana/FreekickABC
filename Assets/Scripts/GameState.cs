@@ -5,6 +5,8 @@ public class GameState : MonoBehaviour
 {
 	public static GameState instance;
 
+	public bool isAiming;
+	public bool isShooting;
 	public bool isFlyBall;
 	public bool isEnableControl;
 	public bool isGoal;

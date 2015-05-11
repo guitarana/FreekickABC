@@ -35,6 +35,8 @@ public class GameManager : MonoBehaviour {
 	public TriggerDetector swingOff;
 	public GameObject camPos;
 
+	public GameObject[] pos;
+
 	// Use this for initialization
 	void Start () {
 		instance = this;
@@ -56,6 +58,7 @@ public class GameManager : MonoBehaviour {
 
 	public int shotCounter=0;
 	public int goalCounter=0;
+	public float succesRatio=0;
 	public int blockedCounter=0;
 	public int bonus=0;
 	public float score;
@@ -68,6 +71,7 @@ public class GameManager : MonoBehaviour {
 	void DoArcade(){
 
 		if(substate == SubState.Init){
+
 			keeper.gameObject.SetActive(true);
 			bullseye.gameObject.SetActive(false);
 
@@ -110,6 +114,8 @@ public class GameManager : MonoBehaviour {
 				PlayerStatistic.instance.xpGain = PlayerStatistic.instance.xpGain+goalCounter;
 				goalCounter = 0;
 				StartCoroutine(BeginLevelUp());
+				substate = SubState.Init;
+				GameState.instance.isEnableControl = false;
 			}
 
 			if(ballStock == 0){
@@ -278,8 +284,7 @@ public class GameManager : MonoBehaviour {
 		InGameUIManager.instance.pauseYourScoreText    .text = score.ToString();
 		InGameUIManager.instance.pauseShotsText        .text = shotCounter.ToString();
 		InGameUIManager.instance.pauseGoalsText        .text = goalCounter.ToString();
-		if(shotCounter!=0)
-			InGameUIManager.instance.pauseSuccessText      .text = ((goalCounter/shotCounter)*100).ToString();
+		InGameUIManager.instance.pauseSuccessText      .text = succesRatio.ToString("F1") + " %";
 		InGameUIManager.instance.pauseGoalKeeperText   .text = blockedCounter.ToString();
 		InGameUIManager.instance.winLevelText          .text = PlayerStatistic.instance.globalLevel.ToString();
 		InGameUIManager.instance.winTargetText         .text = PlayerStatistic.instance.targetScore.ToString();
@@ -299,19 +304,32 @@ public class GameManager : MonoBehaviour {
 		InGameUIManager.instance.gameOverYourScoreText .text = score.ToString();
 		InGameUIManager.instance.gameOverShotsText     .text = shotCounter.ToString();
 		InGameUIManager.instance.gameOverGoalsText     .text = goalCounter.ToString();
-		if(shotCounter!=0)
-			InGameUIManager.instance.gameOverSuccessText   .text = ((goalCounter/shotCounter)*100).ToString();
+		InGameUIManager.instance.gameOverSuccessText   .text = succesRatio.ToString("F1") +" %";
 		InGameUIManager.instance.gameOverBonusText     .text = bonus.ToString();
 		InGameUIManager.instance.gameOverGoalKeeperText.text = blockedCounter.ToString();
 		InGameUIManager.instance.gameOverXPGained      .text = PlayerStatistic.instance.xpGain.ToString();
 
+		if(shotCounter!=0)
+			succesRatio =((float)goalCounter/(float)shotCounter)*100;
+
+	}
+
+	void SetPos(){
+		initialPos = pos[Random.Range(0,pos.Length-1)].transform;
+		PlayerAvatar.instance.gameObject.transform.position = initialPos.GetChild(0).transform.position;
+		PlayerAvatar.instance.gameObject.transform.rotation = initialPos.GetChild(0).transform.rotation;
 	}
 
 	void LevelUp(){
-		//play animation & play cinematic...
+		InGameUIManager.instance.inGameState = InGameUIManager.InGameState.WinGame;
+		PlayerAvatar.instance.gameObject.transform.rotation = Quaternion.Euler(new Vector3(0,180,0));
+		mainCamera.target = PlayerAvatar.instance.gameObject.transform;
+		PlayerAvatar.instance.aiState = PlayerAvatar.AIState.Celeb1;
+		PlayerAvatar.instance.substate = PlayerAvatar.SubState.Init;
+		GameManager.instance.substate = SubState.Init;
 	}
 
-	void Reset(){
+	public void Reset(){
 		if(ball){
 			Destroy (ball);
 		}
@@ -321,11 +339,13 @@ public class GameManager : MonoBehaviour {
 		mainCamera.target = ball.transform;
 		mainCamera.isDamping = false;
 		mainCamera.isStop = false;
-
+		SetPos();
 		ball.GetComponent<Rigidbody> ().isKinematic = true; 
 		ball.transform.position = initialPos.position;
 		ball.GetComponent<Rigidbody> ().isKinematic = true; 
 
+		PlayerAvatar.instance.aiState = PlayerAvatar.AIState.Idle;
+		PlayerAvatar.instance.substate = PlayerAvatar.SubState.Init;
 
 		goalDetector.ballIn = false;
 		swingOff.ballIn = false;

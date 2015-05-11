@@ -25,7 +25,7 @@ public class Controller : MonoBehaviour
 		}
 
 		if (GameState.instance.isEnableControl) {
-			if (!GameState.instance.isFlyBall) {
+			if (!GameState.instance.isFlyBall && !GameState.instance.isAiming) {
 				
 				Vector3 currentPos = Input.mousePosition; //THE CURRENT POSITION OF THE MOUSE
 				currentPos.z = 5f; //ADDING DEPTH TO THE POSITION
@@ -40,20 +40,10 @@ public class Controller : MonoBehaviour
 				if (Input.GetMouseButtonUp (0)) { //IF MOUSE IS RELEASED (SWIPE COMPLETE)
 					mouseEnd = Input.mousePosition; //SAVE MOUSE END POSITION
 					if (Vector3.Distance (mouseStart, mouseEnd) > 20) { //CHECK IF THE MOUSE WAS SWIPED A DISTANCE - NOT A CLICK
-
-
-						ball.GetComponent<Rigidbody> ().isKinematic = false; 
-						ball.GetComponent<Rigidbody> ().WakeUp ();
-						forceValue = 90;
-						Debug.Log ("LineLength : " + forceValue);
-						ball.transform.rotation = Quaternion.Euler (new Vector3 (-GetLength ()*0.4f, -(GetAngle ()), 0)); //ROTATE THE BALL TO FACE THE DIRECTION OF THE SWIPE - LENGTH = Y, ANGLE = X
-			
-						ball.GetComponent<Rigidbody> ().AddRelativeForce (Vector3.forward * forceValue, ForceMode.Impulse); //NOW THE BALL IS FACING THE DIRECTION OF SWIPE, ADD FORWARD FORCE SIMPLY
-						ball.GetComponent<ConstantForce>().force = new Vector3(-forceValue/2F,forceValue*0.3f,0);
-						ball.GetComponent<ConstantForce> ().enabled = true;
-						GameState.instance.isFlyBall = true;
+						GameState.instance.isAiming = true;
 	
 					}
+
 					
 				}
 				
@@ -61,7 +51,21 @@ public class Controller : MonoBehaviour
 
 				}
 
-			} else {
+			}else if(GameState.instance.isShooting){
+				ball.GetComponent<Rigidbody> ().isKinematic = false; 
+				ball.GetComponent<Rigidbody> ().WakeUp ();
+				forceValue = 90;
+				Debug.Log ("LineLength : " + forceValue);
+				ball.transform.rotation = Quaternion.Euler (new Vector3 (-GetLength ()*0.4f, -(GetAngle ()), 0)); //ROTATE THE BALL TO FACE THE DIRECTION OF THE SWIPE - LENGTH = Y, ANGLE = X
+				
+				ball.GetComponent<Rigidbody> ().AddRelativeForce (Vector3.forward * forceValue, ForceMode.Impulse); //NOW THE BALL IS FACING THE DIRECTION OF SWIPE, ADD FORWARD FORCE SIMPLY
+				ball.GetComponent<ConstantForce>().force = new Vector3(-forceValue/2F,forceValue*0.3f,0);
+				ball.GetComponent<ConstantForce> ().enabled = true;
+				GameState.instance.isFlyBall = true;
+				GameState.instance.isShooting = false;
+				GameState.instance.isAiming = false;
+			}
+			else{
 				ball.transform.Rotate(new Vector3(0,10,0));
 				if (GameState.instance.isGoal) {
 					ball.GetComponent<ConstantForce> ().enabled= false;

@@ -8,13 +8,15 @@ public class GoalKeeperAI : MonoBehaviour
 	public GameObject rightHand;
 	public float minReflectDistance= 5f;
 	public float agility= 5f;
+	public bool isJump=false;
 
 	public enum AIState{
 		None,
 		Idle,
 		JumpLeft,
 		JumpRight,
-		Jockey
+		Jockey,
+		Catch
 	}
 
 	public AIState aiState = AIState.None;
@@ -61,6 +63,7 @@ public class GoalKeeperAI : MonoBehaviour
 
 		if (substate == SubState.Init) {
 			gameObject.SetActive(true);
+			isJump = false;
 			substate = SubState.Active;
 		}
 
@@ -90,20 +93,54 @@ public class GoalKeeperAI : MonoBehaviour
 		}
 		
 		if (substate == SubState.Active) {
-			if(Vector3.Distance(ball.transform.position,leftHand.transform.position)<Vector3.Distance(ball.transform.position,rightHand.transform.position)){
-				transform.Translate(Vector3.left*Time.deltaTime*agility);
-				if(Vector3.Distance(ball.transform.position,leftHand.transform.position)<minReflectDistance){
-					aiState = AIState.JumpLeft;
+	
+
+			if(Mathf.Abs(ball.transform.position.z-transform.position.z)<=2f){
+				if(Vector3.Distance(ball.transform.position,leftHand.transform.position)<12){
+					aiState = AIState.Catch;
 					substate = SubState.Init;
 				}
-			}
-			else{
-				transform.Translate(Vector3.right*Time.deltaTime*agility);
-				if(Vector3.Distance(ball.transform.position,rightHand.transform.position)<minReflectDistance){
-					aiState = AIState.JumpRight;
+				if(Vector3.Distance(ball.transform.position,rightHand.transform.position)<12){
+					aiState = AIState.Catch;
 					substate = SubState.Init;
 				}
+			
+			}else{
+				if(Vector3.Distance(ball.transform.position,leftHand.transform.position)<Vector3.Distance(ball.transform.position,rightHand.transform.position)){
+					transform.Translate(Vector3.left*Time.deltaTime*agility);
+					if(Vector3.Distance(ball.transform.position,leftHand.transform.position)<30){
+						aiState = AIState.JumpLeft;
+						substate = SubState.Init;
+					}
+				}
+				else{
+					transform.Translate(Vector3.right*Time.deltaTime*agility);
+					if(Vector3.Distance(ball.transform.position,rightHand.transform.position)<30){
+						aiState = AIState.JumpRight;
+						substate = SubState.Init;
+					}
+				}
 			}
+		}
+		
+		if (substate == SubState.Deactive) {
+			
+		}
+		
+		if (substate == SubState.Finish) {
+			
+		}
+	}
+
+	void DoCatch(){
+		
+		if (substate == SubState.Init) {
+
+			substate = SubState.Active;
+		}
+		
+		if (substate == SubState.Active) { 
+			
 		}
 		
 		if (substate == SubState.Deactive) {
@@ -118,11 +155,12 @@ public class GoalKeeperAI : MonoBehaviour
 	void DoJumpRight(){
 		
 		if (substate == SubState.Init) {
+			transform.localScale = new Vector3(-3.748038f,3.748038f,3.748038f);
 			transform.Translate(Vector3.right*1);
 			substate = SubState.Active;
 		}
 		
-		if (substate == SubState.Active) {
+		if (substate == SubState.Active) { 
 			
 		}
 		
@@ -138,6 +176,7 @@ public class GoalKeeperAI : MonoBehaviour
 	void DoJumpLeft(){
 		
 		if (substate == SubState.Init) {
+			transform.localScale = new Vector3(3.748038f,3.748038f,3.748038f);
 			transform.Translate(Vector3.left*1);
 			substate = SubState.Active;
 		}
@@ -172,6 +211,9 @@ public class GoalKeeperAI : MonoBehaviour
 		case AIState.JumpRight:
 			DoJumpRight();
 			break;
+		case AIState.Catch:
+			DoCatch();
+			break;
 		}
 	}
 
@@ -179,17 +221,49 @@ public class GoalKeeperAI : MonoBehaviour
 	void UpdateAnimation(){
 		switch (aiState) {
 		case AIState.Idle :
+			transform.localScale = new Vector3(3.748038f,3.748038f,3.748038f);
 			anim.CrossFade("Idle",0);
 			break;
 		case AIState.Jockey :
+			transform.localScale = new Vector3(3.748038f,3.748038f,3.748038f);
 			anim.CrossFade("Idle");
 			break;
+		case AIState.Catch :
+			transform.localScale = new Vector3(3.748038f,3.748038f,3.748038f);
+			if(substate == SubState.Init){
+				if(ball.transform.position.y>1 && ball.transform.position.y <2)
+					anim.CrossFade("Catch",0.25f);
+				else
+					anim.CrossFade("BlockNear",0.25f);
+			}
+			break;
 		case AIState.JumpLeft:
-			anim.CrossFade("JumpLeft");
+			if(substate == SubState.Init){
+				if(Vector3.Distance(ball.transform.position,rightHand.transform.position)>20 && Vector3.Distance(ball.transform.position,rightHand.transform.position)<30)
+					anim.CrossFade("BlockFar");
+				if(Vector3.Distance(ball.transform.position,rightHand.transform.position)>10 && Vector3.Distance(ball.transform.position,rightHand.transform.position)<20)
+					anim.CrossFade("BlockMedium");
+				if(Vector3.Distance(ball.transform.position,rightHand.transform.position)>2 && Vector3.Distance(ball.transform.position,rightHand.transform.position)<=10)
+					anim.CrossFade("BlockNear");
+
+
+			}
 			break;
 		case AIState.JumpRight:
-			anim.CrossFade("JumpRight");
+			if(substate == SubState.Init){
+
+				if(Vector3.Distance(ball.transform.position,rightHand.transform.position)>20 && Vector3.Distance(ball.transform.position,rightHand.transform.position)<30)
+					anim.CrossFade("BlockFar");
+				if(Vector3.Distance(ball.transform.position,rightHand.transform.position)>minReflectDistance*0.5f && Vector3.Distance(ball.transform.position,rightHand.transform.position)<minReflectDistance)
+					anim.CrossFade("BlockMedium");
+				if(Vector3.Distance(ball.transform.position,rightHand.transform.position)>minReflectDistance*0.1f && Vector3.Distance(ball.transform.position,rightHand.transform.position)<=minReflectDistance*0.5f)
+					anim.CrossFade("BlockNear");
+
+				isJump = true;
+			}
 			break;
+
+		
 		}
 	}
 	

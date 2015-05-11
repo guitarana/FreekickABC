@@ -30,6 +30,7 @@ public class CameraManager : MonoBehaviour
 	public float fov;
 	private Camera mainCam;
 	public Transform target2;
+	public Transform lookTarget;
 
 
 	void Start(){

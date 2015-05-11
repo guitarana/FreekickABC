@@ -23,7 +23,7 @@ public class Ball : MonoBehaviour
 //		if (collision.relativeVelocity.magnitude > 2)
 //			audio.Play();
 
-		if(collision.collider.gameObject.tag == "keeper"){
+		if(collision.collider.gameObject.tag == "Keeper"){
 			if(!blocked){
 				blocked = true;
 				GameManager.instance.blockedCounter +=1;

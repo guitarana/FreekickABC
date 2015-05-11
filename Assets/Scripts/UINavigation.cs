@@ -46,6 +46,7 @@ public class UINavigation : MonoBehaviour {
 	}
 
 	public void GoStartGame(){
+		GameManager.instance.Reset();
 		InGameUIManager.instance.inGameState = InGameUIManager.InGameState.BeginGame;
 		InGameUIManager.instance.substate = InGameUIManager.SubState.Init;
 
@@ -60,6 +61,7 @@ public class UINavigation : MonoBehaviour {
 		GameManager.instance.score = 0;
 		GameManager.instance.timer = 0;
 		GameManager.instance.goalCounter = 0;
+		GameManager.instance.Reset();
 		InGameUIManager.instance.inGameState = InGameUIManager.InGameState.BeginGame;
 		InGameUIManager.instance.substate = InGameUIManager.SubState.Init;
 	}
