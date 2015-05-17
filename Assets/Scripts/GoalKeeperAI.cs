@@ -9,6 +9,7 @@ public class GoalKeeperAI : MonoBehaviour
 	public float minReflectDistance= 5f;
 	public float agility= 5f;
 	public bool isJump=false;
+	public Vector3 initPos;
 
 	public enum AIState{
 		None,
@@ -34,6 +35,7 @@ public class GoalKeeperAI : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
+		initPos = transform.position;
 		anim = gameObject.GetComponent<Animation> ();
 		aiState = AIState.Idle;
 
@@ -62,6 +64,7 @@ public class GoalKeeperAI : MonoBehaviour
 	void DoIdle(){
 
 		if (substate == SubState.Init) {
+
 			gameObject.SetActive(true);
 			isJump = false;
 			substate = SubState.Active;
@@ -70,6 +73,8 @@ public class GoalKeeperAI : MonoBehaviour
 		if (substate == SubState.Active) {
 			if(!ball)
 				ball = GameManager.instance.ball;
+			transform.rotation = Quaternion.RotateTowards(transform.rotation, ball.transform.rotation* Quaternion.Euler(new Vector3(0,180,0)), Time.deltaTime * 100f);
+
 			if(GameState.instance.isFlyBall){
 				substate = SubState.Deactive;
 			}
@@ -94,6 +99,7 @@ public class GoalKeeperAI : MonoBehaviour
 		
 		if (substate == SubState.Active) {
 	
+			//transform.rotation = Quaternion.RotateTowards(transform.rotation, ball.transform.rotation* Quaternion.Euler(new Vector3(0,180,0)), Time.deltaTime * 100f);
 
 			if(Mathf.Abs(ball.transform.position.z-transform.position.z)<=2f){
 				if(Vector3.Distance(ball.transform.position,leftHand.transform.position)<12){
@@ -239,7 +245,7 @@ public class GoalKeeperAI : MonoBehaviour
 			break;
 		case AIState.JumpLeft:
 			if(substate == SubState.Init){
-				if(Vector3.Distance(ball.transform.position,rightHand.transform.position)>20 && Vector3.Distance(ball.transform.position,rightHand.transform.position)<30)
+				if(Vector3.Distance(ball.transform.position,rightHand.transform.position)>20)
 					anim.CrossFade("BlockFar");
 				if(Vector3.Distance(ball.transform.position,rightHand.transform.position)>10 && Vector3.Distance(ball.transform.position,rightHand.transform.position)<20)
 					anim.CrossFade("BlockMedium");
@@ -252,7 +258,7 @@ public class GoalKeeperAI : MonoBehaviour
 		case AIState.JumpRight:
 			if(substate == SubState.Init){
 
-				if(Vector3.Distance(ball.transform.position,rightHand.transform.position)>20 && Vector3.Distance(ball.transform.position,rightHand.transform.position)<30)
+				if(Vector3.Distance(ball.transform.position,rightHand.transform.position)>20)
 					anim.CrossFade("BlockFar");
 				if(Vector3.Distance(ball.transform.position,rightHand.transform.position)>minReflectDistance*0.5f && Vector3.Distance(ball.transform.position,rightHand.transform.position)<minReflectDistance)
 					anim.CrossFade("BlockMedium");

@@ -199,20 +199,40 @@ public class GameManager : MonoBehaviour {
 		if(substate == SubState.Init){
 			keeper.gameObject.SetActive(true);
 			bullseye.gameObject.SetActive(false);
-
-
+			substate = SubState.Active;
 		}
 		
 		if(substate == SubState.Active){
-			
+			if(GameState.instance.isFlyBall){
+				shotCounter +=1;
+				timer2 =0;
+				substate = SubState.Deactive;
+			}
 		}
 		
 		if(substate == SubState.Deactive){
-			
+			if(GameState.instance.isGoal){
+				goalCounter +=1;
+				score = goalCounter*10;
+				substate = SubState.Finish;
+			}
+
+			timer2 +=Time.deltaTime;
+			if(timer2>1){
+				timer2 =0;
+				InGameUIManager.instance.inGameState = InGameUIManager.InGameState.GameOver;
+				substate = SubState.Finish;
+			}
+
 		}
 		
 		if(substate == SubState.Finish){
-			
+			timer2 +=Time.deltaTime;
+			if(timer2>1){
+				timer2 =0;
+				Reset();
+				substate = SubState.Init;
+			}
 		}
 		
 	}
@@ -322,9 +342,21 @@ public class GameManager : MonoBehaviour {
 
 	void LevelUp(){
 		InGameUIManager.instance.inGameState = InGameUIManager.InGameState.WinGame;
-		PlayerAvatar.instance.gameObject.transform.rotation = Quaternion.Euler(new Vector3(0,180,0));
+		PlayerAvatar.instance.gameObject.transform.rotation = Quaternion.Euler(new Vector3(0,90,0));
 		mainCamera.target = PlayerAvatar.instance.gameObject.transform;
-		PlayerAvatar.instance.aiState = PlayerAvatar.AIState.Celeb1;
+		GameState.instance.isCelebrating = true;
+		int r = Random.Range(0,2);
+		switch(r){
+		case 0:
+			PlayerAvatar.instance.aiState = PlayerAvatar.AIState.Celeb1;
+			break;
+		case 1:
+			PlayerAvatar.instance.aiState = PlayerAvatar.AIState.Celeb2;
+			break;
+		case 2:
+			PlayerAvatar.instance.aiState = PlayerAvatar.AIState.Celeb3;
+			break;
+		}
 		PlayerAvatar.instance.substate = PlayerAvatar.SubState.Init;
 		GameManager.instance.substate = SubState.Init;
 	}
@@ -335,6 +367,7 @@ public class GameManager : MonoBehaviour {
 		}
 		ball = Instantiate(ballTemp);
 		ball.GetComponent<Rigidbody> ().isKinematic = true; 
+		GameState.instance.isCelebrating = false;
 
 		mainCamera.target = ball.transform;
 		mainCamera.isDamping = false;
@@ -343,7 +376,7 @@ public class GameManager : MonoBehaviour {
 		ball.GetComponent<Rigidbody> ().isKinematic = true; 
 		ball.transform.position = initialPos.position;
 		ball.GetComponent<Rigidbody> ().isKinematic = true; 
-
+	
 		PlayerAvatar.instance.aiState = PlayerAvatar.AIState.Idle;
 		PlayerAvatar.instance.substate = PlayerAvatar.SubState.Init;
 
@@ -352,8 +385,10 @@ public class GameManager : MonoBehaviour {
 		GameState.instance.isFlyBall = false;
 		GameState.instance.isCameraDamping = false;
 
+
 		keeper.aiState = GoalKeeperAI.AIState.Idle;
 		keeper.substate = GoalKeeperAI.SubState.Init;
+		keeper.transform.position = new Vector3(keeper.initPos.x + Random.Range(0,1),keeper.initPos.y,keeper.initPos.z +Random.Range(-5,5));
 
 		Controller.instance.ball = ball;
 

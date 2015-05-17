@@ -13,7 +13,7 @@ public class GameState : MonoBehaviour
 	public bool isEnableSwing;
 	public bool isCameraDamping;
 	public bool isCameraStatic;
-
+	public bool isCelebrating;
 	// Use this for initialization
 	void Start ()
 	{
@@ -30,12 +30,10 @@ public class GameState : MonoBehaviour
 		}
 
 		if (isFlyBall && !isGoal) {
-			if(GameManager.instance.gameMode == GameManager.GameMode.Arcade)
+
 				isCameraDamping = true;
-			if(GameManager.instance.gameMode == GameManager.GameMode.TimeAttack){
-				isCameraDamping = false;
-				isCameraStatic = true;
-			}
+				//isCameraStatic = true;
+
 		}
 
 		if (!isEnableSwing) {

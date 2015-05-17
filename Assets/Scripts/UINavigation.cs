@@ -52,6 +52,13 @@ public class UINavigation : MonoBehaviour {
 
 	}
 
+	public void GoBeginGame(){
+		//GameManager.instance.Reset();
+		InGameUIManager.instance.inGameState = InGameUIManager.InGameState.BeginGame;
+		InGameUIManager.instance.substate = InGameUIManager.SubState.Init;
+		
+	}
+
 	public void GoHome(){
 		UIManager.instance.state = UIManager.State.MainMenu;
 		Application.LoadLevel("freeKick_menu");

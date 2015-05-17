@@ -56,7 +56,7 @@ public class Controller : MonoBehaviour
 				ball.GetComponent<Rigidbody> ().WakeUp ();
 				forceValue = 90;
 				Debug.Log ("LineLength : " + forceValue);
-				ball.transform.rotation = Quaternion.Euler (new Vector3 (-GetLength ()*0.4f, -(GetAngle ()), 0)); //ROTATE THE BALL TO FACE THE DIRECTION OF THE SWIPE - LENGTH = Y, ANGLE = X
+				ball.transform.rotation = Quaternion.Euler (new Vector3 (-GetLength ()*0.4f, -(GetAngle ()), 0)) * Quaternion.Euler(0, CameraManager.instance.angle, 0); //ROTATE THE BALL TO FACE THE DIRECTION OF THE SWIPE - LENGTH = Y, ANGLE = X
 				
 				ball.GetComponent<Rigidbody> ().AddRelativeForce (Vector3.forward * forceValue, ForceMode.Impulse); //NOW THE BALL IS FACING THE DIRECTION OF SWIPE, ADD FORWARD FORCE SIMPLY
 				ball.GetComponent<ConstantForce>().force = new Vector3(-forceValue/2F,forceValue*0.3f,0);
@@ -93,11 +93,11 @@ public class Controller : MonoBehaviour
 							break;
 						case "RIGHT ":
 							Debug.Log ("RIGHT");
-							ball.GetComponent<ConstantForce> ().force = new Vector3 (0, 0, GetLength ()*3f);
+							ball.GetComponent<ConstantForce> ().force = Quaternion.Euler(0, CameraManager.instance.angle/2, 0) * new Vector3 (0, 0, GetLength ()*3f);
 							break;
 						case "LEFT ":
 							Debug.Log ("LEFT");
-							ball.GetComponent<ConstantForce> ().force = new Vector3 (0, 0, -GetLength ()*3f);
+							ball.GetComponent<ConstantForce> ().force = Quaternion.Euler(0, CameraManager.instance.angle/2, 0) * new Vector3 (0, 0, -GetLength ()*3f);
 							break;
 							
 							}
