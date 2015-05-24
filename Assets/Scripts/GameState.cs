@@ -23,6 +23,13 @@ public class GameState : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
+		if(InGameUIManager.instance.inGameState == InGameUIManager.InGameState.PauseGame){ 
+			isEnableControl = false; 
+			return;
+		}
+
+
+
 		if (isGoal) {
 			isEnableControl = false;
 			isEnableSwing = false;

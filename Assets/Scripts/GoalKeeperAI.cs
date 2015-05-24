@@ -277,6 +277,9 @@ public class GoalKeeperAI : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
+
+		if(InGameUIManager.instance.inGameState == InGameUIManager.InGameState.PauseGame) return;
+
 		UpdateState ();
 		UpdateAnimation ();
 	}

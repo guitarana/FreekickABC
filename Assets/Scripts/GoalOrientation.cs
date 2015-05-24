@@ -12,6 +12,9 @@ public class GoalOrientation : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if(InGameUIManager.instance.inGameState == InGameUIManager.InGameState.PauseGame) return;
+
+
 		if(target)
 			transform.LookAt(target.transform);
 		else

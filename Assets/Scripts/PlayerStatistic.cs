@@ -55,7 +55,7 @@ public class PlayerStatistic : MonoBehaviour
 	public string username = "Player";
 	public int globalLevel;
 	public int xpGain;
-	public int xpRemaining = 2;
+	public int xpRemaining = 15;
 	
 	//Local GameMode Stat
 	public int targetScore;
@@ -76,6 +76,8 @@ public class PlayerStatistic : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
+		if(InGameUIManager.instance.inGameState == InGameUIManager.InGameState.PauseGame) return;
+
 		if(xpGain==xpRemaining)
 			UpgradeXP();
 	}

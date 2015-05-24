@@ -39,6 +39,7 @@ public class InGameUIManager : MonoBehaviour
 	public UILabel scoreText;
 	public UILabel kreditText;
 	public UILabel labelText;
+	public UILabel distanceText;
 
 	//StartHUD
 	public UILabel startLevelText;
@@ -135,15 +136,20 @@ public class InGameUIManager : MonoBehaviour
 	}
 
 	void DoBeginGame(){
-		
+
 		if(substate == SubState.Init){
+			if(inGameState == InGameState.BeginGame && !GameState.instance.isFlyBall){ 
+				GameManager.instance.EnableControl();
+			}
 			DisableAllPanel();
 			PlayerStatistic.instance.SaveGame();
 			panelInGame.SetActive(true);
+			substate = SubState.Active;
+		
 		}
 		
 		if(substate == SubState.Active){
-			substate = SubState.Deactive;
+			//substate = SubState.Deactive;
 		}
 		
 		if(substate == SubState.Deactive){

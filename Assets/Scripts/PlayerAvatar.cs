@@ -89,7 +89,8 @@ public class PlayerAvatar : MonoBehaviour
 		
 		if (substate == SubState.Active) {
 			timer += Time.deltaTime;
-			if(timer >= anim.GetClip("Shoot").length -0.5f){
+			if(timer >= anim.GetClip("Shoot").length -1.4f){
+				GameManager.instance.grassFX.Emit(10);
 				timer = 0;
 				GameState.instance.isShooting = true;
 				substate = SubState.Deactive;
@@ -224,6 +225,9 @@ public class PlayerAvatar : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
+		if(InGameUIManager.instance.inGameState == InGameUIManager.InGameState.PauseGame) return;
+
+
 		UpdateState ();
 		UpdateAnimation ();
 	}

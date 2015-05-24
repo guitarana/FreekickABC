@@ -120,9 +120,9 @@ ModelImporter:
     - serializedVersion: 16
       name: Shoot
       takeName: Take 001
-      firstFrame: 3
-      lastFrame: 29
-      wrapMode: 2
+      firstFrame: 33
+      lastFrame: 105
+      wrapMode: 8
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
@@ -270,8 +270,8 @@ ModelImporter:
     - serializedVersion: 16
       name: Seleb_berdiri
       takeName: Take 001
-      firstFrame: 35
-      lastFrame: 71
+      firstFrame: 134
+      lastFrame: 169
       wrapMode: 2
       orientationOffsetY: 0
       level: 0
@@ -420,8 +420,8 @@ ModelImporter:
     - serializedVersion: 16
       name: Seleb_tepuk tangan
       takeName: Take 001
-      firstFrame: 76
-      lastFrame: 196
+      firstFrame: 175
+      lastFrame: 291
       wrapMode: 2
       orientationOffsetY: 0
       level: 0
@@ -570,8 +570,8 @@ ModelImporter:
     - serializedVersion: 16
       name: Seleb_duduk
       takeName: Take 001
-      firstFrame: 201
-      lastFrame: 231
+      firstFrame: 307
+      lastFrame: 325
       wrapMode: 2
       orientationOffsetY: 0
       level: 0
@@ -721,7 +721,7 @@ ModelImporter:
       name: Idle
       takeName: Take 001
       firstFrame: 0
-      lastFrame: 1
+      lastFrame: 41
       wrapMode: 2
       orientationOffsetY: 0
       level: 0
@@ -870,8 +870,8 @@ ModelImporter:
     - serializedVersion: 16
       name: IdleLocker
       takeName: Take 001
-      firstFrame: 239
-      lastFrame: 391
+      firstFrame: 334
+      lastFrame: 490
       wrapMode: 2
       orientationOffsetY: 0
       level: 0

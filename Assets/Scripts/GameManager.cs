@@ -37,6 +37,9 @@ public class GameManager : MonoBehaviour {
 
 	public GameObject[] pos;
 
+	public float goalDistance;
+	public ParticleSystem grassFX;
+
 	// Use this for initialization
 	void Start () {
 		instance = this;
@@ -256,6 +259,8 @@ public class GameManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		if(InGameUIManager.instance.inGameState == InGameUIManager.InGameState.PauseGame) return;
+
 		UpdateGameMode();
 		UpdateState ();
 		UpdateStat();
@@ -268,7 +273,7 @@ public class GameManager : MonoBehaviour {
 		yield return new WaitForSeconds (1f);
 		LevelUp();
 	}
-
+	
 	IEnumerator StartEnableControl(){
 		yield return new WaitForSeconds (0.5f);
 		GameState.instance.isEnableControl = true;
@@ -278,6 +283,9 @@ public class GameManager : MonoBehaviour {
 	#endregion
 
 	#region function
+	public void EnableControl(){
+		StartCoroutine(StartEnableControl());
+	}
 
 	void UpdateStat(){
 		InGameUIManager.instance.scoreText.text = score.ToString();
@@ -287,6 +295,8 @@ public class GameManager : MonoBehaviour {
 			InGameUIManager.instance.timeText.text  = Mathf.RoundToInt(maxTime-timer).ToString();
 		if(gameMode == GameMode.OneBall)
 			InGameUIManager.instance.timeText.text  = Mathf.RoundToInt(maxTime-timer).ToString();
+
+		InGameUIManager.instance.distanceText.text = ((int)(goalDistance)-37).ToString();
 
 		InGameUIManager.instance.goalText.text  = goalCounter.ToString();
 		InGameUIManager.instance.startLevelText        .text = PlayerStatistic.instance.chart.ToString();
@@ -334,6 +344,7 @@ public class GameManager : MonoBehaviour {
 
 	}
 
+
 	void SetPos(){
 		initialPos = pos[Random.Range(0,pos.Length-1)].transform;
 		PlayerAvatar.instance.gameObject.transform.position = initialPos.GetChild(0).transform.position;
@@ -376,7 +387,8 @@ public class GameManager : MonoBehaviour {
 		ball.GetComponent<Rigidbody> ().isKinematic = true; 
 		ball.transform.position = initialPos.position;
 		ball.GetComponent<Rigidbody> ().isKinematic = true; 
-	
+		grassFX.transform.position = initialPos.position;
+
 		PlayerAvatar.instance.aiState = PlayerAvatar.AIState.Idle;
 		PlayerAvatar.instance.substate = PlayerAvatar.SubState.Init;
 
@@ -388,10 +400,10 @@ public class GameManager : MonoBehaviour {
 
 		keeper.aiState = GoalKeeperAI.AIState.Idle;
 		keeper.substate = GoalKeeperAI.SubState.Init;
-		keeper.transform.position = new Vector3(keeper.initPos.x + Random.Range(0,1),keeper.initPos.y,keeper.initPos.z +Random.Range(-5,5));
+		keeper.transform.position = new Vector3(keeper.initPos.x + Random.Range(0,1),keeper.initPos.y,keeper.initPos.z +Random.Range(-2,2));
 
 		Controller.instance.ball = ball;
-
+		goalDistance = Vector3.Distance(ball.transform.position,goal.transform.position);
 
 		StartCoroutine (StartEnableControl ());
 
