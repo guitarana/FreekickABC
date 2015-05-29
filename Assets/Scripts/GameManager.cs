@@ -379,7 +379,7 @@ public class GameManager : MonoBehaviour {
 		ball = Instantiate(ballTemp);
 		ball.GetComponent<Rigidbody> ().isKinematic = true; 
 		GameState.instance.isCelebrating = false;
-
+		Controller.instance.ball = ball;
 		mainCamera.target = ball.transform;
 		mainCamera.isDamping = false;
 		mainCamera.isStop = false;
@@ -402,7 +402,7 @@ public class GameManager : MonoBehaviour {
 		keeper.substate = GoalKeeperAI.SubState.Init;
 		keeper.transform.position = new Vector3(keeper.initPos.x + Random.Range(0,1),keeper.initPos.y,keeper.initPos.z +Random.Range(-2,2));
 
-		Controller.instance.ball = ball;
+
 		goalDistance = Vector3.Distance(ball.transform.position,goal.transform.position);
 
 		StartCoroutine (StartEnableControl ());

@@ -10,6 +10,7 @@ public class Controller : MonoBehaviour
 	Vector3 mouseEnd = Vector3.zero; //THE MOUSE POSITION WHEN IT IS RELEASED (MOUSEUP)
 	
 	public float forceValue;
+	public float sensitivity;
 	public GameObject ball;
 	// Use this for initialization
 	void Start () {
@@ -19,11 +20,13 @@ public class Controller : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update () {
+		if(!ball) ball = GameManager.instance.ball;
 		if(InGameUIManager.instance.inGameState == InGameUIManager.InGameState.PauseGame) return;
 
 		if(GameState.instance.isGoal || !GameState.instance.isEnableSwing){
 			ball.GetComponent<ConstantForce> ().enabled= false;
 		}
+
 
 		if (GameState.instance.isEnableControl) {
 			if (!GameState.instance.isFlyBall && !GameState.instance.isAiming) {
@@ -86,19 +89,19 @@ public class Controller : MonoBehaviour
 						switch (GetDirection ()) {
 						case "UP ":
 							Debug.Log ("UP");
-							ball.GetComponent<ConstantForce> ().force = new Vector3 (0, GetLength ()*3f, 0);
+							ball.GetComponent<ConstantForce> ().force = new Vector3 (0, GetLength ()*sensitivity, 0);
 							break;
 						case "DOWN ":
 							Debug.Log ("DOWN");
-							ball.GetComponent<ConstantForce> ().force = new Vector3 (0, -GetLength ()*3f, 0);
+							ball.GetComponent<ConstantForce> ().force = new Vector3 (0, -GetLength ()*sensitivity, 0);
 							break;
 						case "RIGHT ":
 							Debug.Log ("RIGHT");
-							ball.GetComponent<ConstantForce> ().force = Quaternion.Euler(0, CameraManager.instance.angle/2, 0) * new Vector3 (0, 0, GetLength ()*3f);
+							ball.GetComponent<ConstantForce> ().force = Quaternion.Euler(0, CameraManager.instance.angle/2, 0) * new Vector3 (0, 0, GetLength ()*sensitivity);
 							break;
 						case "LEFT ":
 							Debug.Log ("LEFT");
-							ball.GetComponent<ConstantForce> ().force = Quaternion.Euler(0, CameraManager.instance.angle/2, 0) * new Vector3 (0, 0, -GetLength ()*3f);
+							ball.GetComponent<ConstantForce> ().force = Quaternion.Euler(0, CameraManager.instance.angle/2, 0) * new Vector3 (0, 0, -GetLength ()*sensitivity);
 							break;
 							
 							}
