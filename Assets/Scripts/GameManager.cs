@@ -353,6 +353,7 @@ public class GameManager : MonoBehaviour {
 
 	void LevelUp(){
 		InGameUIManager.instance.inGameState = InGameUIManager.InGameState.WinGame;
+		InGameUIManager.instance.substate = InGameUIManager.SubState.Init;
 		PlayerAvatar.instance.gameObject.transform.rotation = Quaternion.Euler(new Vector3(0,90,0));
 		mainCamera.target = PlayerAvatar.instance.gameObject.transform;
 		GameState.instance.isCelebrating = true;

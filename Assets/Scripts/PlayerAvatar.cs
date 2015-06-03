@@ -202,18 +202,23 @@ public class PlayerAvatar : MonoBehaviour
 		switch (aiState) {
 		case AIState.Idle :
 			anim.CrossFade("Idle",0.25f);
+			anim.clip = anim["Idle"].clip;
 			break;
 		case AIState.Shoot :
 			anim.CrossFade("Shoot",0.25f);
+			anim.clip = anim["Shoot"].clip;
 			break;
 		case AIState.Celeb1 :
 			anim.CrossFade("Seleb_berdiri",0.25f);
+			anim.clip = anim["Seleb_berdiri"].clip;
 			break;
 		case AIState.Celeb2 :
 			anim.CrossFade("Seleb_tepuk tangan",0.25f);
+			anim.clip = anim["Seleb_tepuk tangan"].clip;
 			break;
 		case AIState.Celeb3 :
 			anim.CrossFade("Seleb_duduk",0.25f);
+			anim.clip = anim["Seleb_duduk"].clip;
 			break;
 		
 			

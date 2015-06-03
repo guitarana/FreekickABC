@@ -55,7 +55,7 @@ public class PlayerStatistic : MonoBehaviour
 	public string username = "Player";
 	public int globalLevel;
 	public int xpGain;
-	public int xpRemaining = 15;
+	public int xpRemaining = 2;
 	
 	//Local GameMode Stat
 	public int targetScore;
