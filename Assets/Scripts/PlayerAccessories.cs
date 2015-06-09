@@ -1,46 +1,31 @@
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
 public class PlayerAccessories : MonoBehaviour
 {
-	public enum Hat{
-		Koboi,
-		Kupluk,
-		Sunda,
-		Gaul1,
-		Gaul2
-	}
 
-	public enum Glass{
-		Centil,
-		Casual,
-		Gaya
-	}
 
-	public enum Shoes{
-		Boots,
-		HighBoots
-	}
-
-	public class Accessories{
-		string name;
-		GameObject go;
-		bool available;
-	}
-
-	public List<Accessories> accessories;
+	public string hatName;
+	public string glassName;
+	public string shoesName;
+	public PlayerAccessoriesList pl;
 
 	// Use this for initialization
 	void Start ()
 	{
-		accessories = new List<Accessories>();
+		pl=GetComponent<PlayerAccessoriesList>();
 	}
-	
+
 	// Update is called once per frame
 	void Update ()
 	{
-	
+		if(pl.currentHat!=null)
+			hatName = pl.currentHat.name.ToString();
+		if(pl.currentGlass!=null)
+			glassName = pl.currentGlass.name.ToString();
+		if(pl.currentShoes!=null)
+			shoesName = pl.currentShoes.name.ToString();
 	}
+	
 }
 

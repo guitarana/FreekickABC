@@ -55,7 +55,12 @@ public class PlayerStatistic : MonoBehaviour
 	public string username = "Player";
 	public int globalLevel;
 	public int xpGain;
-	public int xpRemaining = 2;
+	public int xpRemaining = 15;
+
+	//Cosmetiic
+	public int hatIndex = 5;
+	public int glassIndex = 3;
+	public int shoesIndex = 3;
 	
 	//Local GameMode Stat
 	public int targetScore;
