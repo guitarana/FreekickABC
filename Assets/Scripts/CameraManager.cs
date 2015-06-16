@@ -45,7 +45,7 @@ public class CameraManager : MonoBehaviour
 
 	void  LateUpdate ()
 	{
-		if(InGameUIManager.instance.inGameState == InGameUIManager.InGameState.PauseGame) return;
+		if(InGameUIManager.instance.inGameState == InGameUIManager.InGameState.PauseGame || InGameUIManager.instance.inGameState == InGameUIManager.InGameState.GameOver) return;
 
 		// Early out if we don't have a target
 		if (!target)

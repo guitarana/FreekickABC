@@ -84,7 +84,11 @@ public class GameManager : MonoBehaviour {
 		}
 
 		if(substate == SubState.Active){
-
+		
+			if(ballStock == 0){
+				InGameUIManager.instance.inGameState = InGameUIManager.InGameState.GameOver;
+				InGameUIManager.instance.substate = InGameUIManager.SubState.Init;
+			}
 
 			if(GameState.instance.isFlyBall){
 				shotCounter +=1;
@@ -260,7 +264,6 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(InGameUIManager.instance.inGameState == InGameUIManager.InGameState.PauseGame) return;
-
 		UpdateGameMode();
 		UpdateState ();
 		UpdateStat();

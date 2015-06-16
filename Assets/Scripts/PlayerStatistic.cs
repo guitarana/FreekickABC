@@ -61,7 +61,13 @@ public class PlayerStatistic : MonoBehaviour
 	public int hatIndex = 5;
 	public int glassIndex = 3;
 	public int shoesIndex = 3;
-	
+	public int clothesIndex = 2;
+	public List<int> availableHatIndex = new List<int>();
+	public List<int> availableGlassIndex = new List<int>();
+	public List<int> availableShoesIndex = new List<int>();
+	public List<int> availableClothesIndex = new List<int>();
+
+
 	//Local GameMode Stat
 	public int targetScore;
 	public int score;
@@ -71,10 +77,29 @@ public class PlayerStatistic : MonoBehaviour
 	public int bonus;
 	public int goalKeeperBlock;
 	public int chart;
+	public bool availableAllCostume = true;
 
 	// Use this for initialization
 	void Start ()
 	{
+		availableHatIndex.Add (5);
+		availableGlassIndex.Add (3);
+		availableShoesIndex.Add (4);
+		availableClothesIndex.Add (2);
+		if(availableAllCostume){
+			for(int i=0;i<5;i++){
+				availableHatIndex.Add(i);
+			}
+			for(int i=0;i<3;i++){
+				availableGlassIndex.Add(i);
+			}
+			for(int i=0;i<4;i++){
+				availableShoesIndex.Add(i);
+			}
+			for(int i=0;i<2;i++){
+				availableClothesIndex.Add(i);
+			}
+		}
 		LoadGame();
 	}
 	

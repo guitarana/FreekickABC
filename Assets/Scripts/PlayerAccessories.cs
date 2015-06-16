@@ -8,6 +8,7 @@ public class PlayerAccessories : MonoBehaviour
 	public string hatName;
 	public string glassName;
 	public string shoesName;
+	public string clothesName;
 	public PlayerAccessoriesList pl;
 
 	// Use this for initialization
@@ -25,6 +26,8 @@ public class PlayerAccessories : MonoBehaviour
 			glassName = pl.currentGlass.name.ToString();
 		if(pl.currentShoes!=null)
 			shoesName = pl.currentShoes.name.ToString();
+		if(pl.currentShoes!=null)
+			clothesName = pl.currentClothes.name.ToString();
 	}
 	
 }

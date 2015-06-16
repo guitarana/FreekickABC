@@ -21,8 +21,7 @@ public class Controller : MonoBehaviour
 	// Update is called once per frame
 	void Update () {
 		if(!ball) ball = GameManager.instance.ball;
-		if(InGameUIManager.instance.inGameState == InGameUIManager.InGameState.PauseGame) return;
-
+		if(InGameUIManager.instance.inGameState == InGameUIManager.InGameState.PauseGame || InGameUIManager.instance.inGameState == InGameUIManager.InGameState.GameOver) return;
 		if(GameState.instance.isGoal || !GameState.instance.isEnableSwing){
 			ball.GetComponent<ConstantForce> ().enabled= false;
 		}
