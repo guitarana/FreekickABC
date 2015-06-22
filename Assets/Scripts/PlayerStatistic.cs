@@ -56,6 +56,7 @@ public class PlayerStatistic : MonoBehaviour
 	public int globalLevel;
 	public int xpGain;
 	public int xpRemaining = 15;
+	public int globalXPGain;
 
 	//Cosmetiic
 	public int hatIndex = 5;
@@ -113,7 +114,8 @@ public class PlayerStatistic : MonoBehaviour
 	}
 
 	void UpgradeXP(){
-		xpRemaining = xpRemaining + (xpRemaining*globalLevel/15);
+		xpRemaining = xpRemaining + (int)((globalLevel/100*xpRemaining));
+		globalLevel +=1;
 	}
 
 	public void SaveGame(){

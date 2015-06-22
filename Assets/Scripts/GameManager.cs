@@ -40,6 +40,10 @@ public class GameManager : MonoBehaviour {
 	public float goalDistance;
 	public ParticleSystem grassFX;
 
+	public BlockerManager block;
+	public int totalBlocker =2;
+
+
 	// Use this for initialization
 	void Start () {
 		instance = this;
@@ -105,6 +109,7 @@ public class GameManager : MonoBehaviour {
 				goalCounter +=1;
 				score = goalCounter*10;
 				timer2 =0;
+				PlayerStatistic.instance.xpGain = goalCounter;
 				substate = SubState.Finish;
 			}
 
@@ -118,7 +123,7 @@ public class GameManager : MonoBehaviour {
 
 		if(substate == SubState.Finish){
 			if(goalCounter==maxGoal){
-				PlayerStatistic.instance.xpGain = PlayerStatistic.instance.xpGain+goalCounter;
+
 				goalCounter = 0;
 				StartCoroutine(BeginLevelUp());
 				substate = SubState.Init;
@@ -374,6 +379,7 @@ public class GameManager : MonoBehaviour {
 		}
 		PlayerAvatar.instance.substate = PlayerAvatar.SubState.Init;
 		GameManager.instance.substate = SubState.Init;
+		goalCounter = 0;
 	}
 
 	public void Reset(){
@@ -406,7 +412,24 @@ public class GameManager : MonoBehaviour {
 		keeper.substate = GoalKeeperAI.SubState.Init;
 		keeper.transform.position = new Vector3(keeper.initPos.x + Random.Range(0,1),keeper.initPos.y,keeper.initPos.z +Random.Range(-2,2));
 
+		block.totalBlocker = totalBlocker;
+		block.gameObject.transform.position = PlayerAvatar.instance.gameObject.transform.position;
+		block.gameObject.transform.rotation = PlayerAvatar.instance.gameObject.transform.rotation;
+		block.gameObject.transform.Translate(Vector3.forward * 25);
 
+		//block.gameObject.transform.rotation = PlayerAvatar.instance.gameObject.transform.rotation;
+		if(PlayerStatistic.instance.globalLevel < 2)
+			block.totalBlocker = 0;
+		else if(PlayerStatistic.instance.globalLevel >= 2 && PlayerStatistic.instance.globalLevel < 5 )
+			block.totalBlocker = Random.Range(0,2);
+		else if(PlayerStatistic.instance.globalLevel >= 5 && PlayerStatistic.instance.globalLevel < 10 )
+			block.totalBlocker = Random.Range(0,3);
+		else if(PlayerStatistic.instance.globalLevel >= 10 && PlayerStatistic.instance.globalLevel < 20 )
+			block.totalBlocker = Random.Range(0,4);
+		else if(PlayerStatistic.instance.globalLevel >= 20)
+			block.totalBlocker = Random.Range(0,5);
+
+		block.Init();
 		goalDistance = Vector3.Distance(ball.transform.position,goal.transform.position);
 
 		StartCoroutine (StartEnableControl ());
