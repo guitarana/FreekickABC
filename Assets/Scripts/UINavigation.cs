@@ -35,6 +35,7 @@ public class UINavigation : MonoBehaviour {
 	
 	public void GoShop(){
 		UIManager.instance.state = UIManager.State.Shop;
+		Application.LoadLevel("ShopMenu");
 	}
 	
 	public void GoTutorial(){

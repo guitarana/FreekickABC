@@ -50,6 +50,7 @@ public class PlayerStatistic : MonoBehaviour
 	public int highScoreArcade;
 	public int highScoreTimeAttack;
 	public int highScoreOneBall;
+	public int credit = 1000000;
 
 	//Player Game Stat
 	public string username = "Player";
@@ -58,11 +59,11 @@ public class PlayerStatistic : MonoBehaviour
 	public int xpRemaining = 15;
 	public int globalXPGain;
 
-	//Cosmetiic
-	public int hatIndex = 5;
-	public int glassIndex = 3;
-	public int shoesIndex = 3;
-	public int clothesIndex = 2;
+	//Cosmetic
+	public int hatIndex = 100;
+	public int glassIndex = 200;
+	public int shoesIndex = 400;
+	public int clothesIndex = 300;
 	public List<int> availableHatIndex = new List<int>();
 	public List<int> availableGlassIndex = new List<int>();
 	public List<int> availableShoesIndex = new List<int>();
@@ -83,21 +84,21 @@ public class PlayerStatistic : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		availableHatIndex.Add (5);
-		availableGlassIndex.Add (3);
-		availableShoesIndex.Add (4);
-		availableClothesIndex.Add (2);
+		availableHatIndex.Add (100);
+		availableGlassIndex.Add (200);
+		availableShoesIndex.Add (400);
+		availableClothesIndex.Add (300);
 		if(availableAllCostume){
-			for(int i=0;i<5;i++){
+			for(int i=101;i<=105;i++){
 				availableHatIndex.Add(i);
 			}
-			for(int i=0;i<3;i++){
+			for(int i=201;i<=203;i++){
 				availableGlassIndex.Add(i);
 			}
-			for(int i=0;i<4;i++){
+			for(int i=401;i<=404;i++){
 				availableShoesIndex.Add(i);
 			}
-			for(int i=0;i<2;i++){
+			for(int i=301;i<=302;i++){
 				availableClothesIndex.Add(i);
 			}
 		}
@@ -107,7 +108,7 @@ public class PlayerStatistic : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		if(InGameUIManager.instance.inGameState == InGameUIManager.InGameState.PauseGame) return;
+//		if(InGameUIManager.instance.inGameState == InGameUIManager.InGameState.PauseGame) return;
 
 		if(xpGain==xpRemaining)
 			UpgradeXP();

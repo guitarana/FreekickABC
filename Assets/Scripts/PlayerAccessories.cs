@@ -4,7 +4,10 @@ using System.Collections;
 public class PlayerAccessories : MonoBehaviour
 {
 
-
+	public int hatIndex;
+	public int glassIndex;
+	public int shoesIndex;
+	public int clothesIndex;
 	public string hatName;
 	public string glassName;
 	public string shoesName;
@@ -20,6 +23,10 @@ public class PlayerAccessories : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
+		hatIndex = pl.hatIndex;
+		glassIndex = pl.glassIndex;
+		shoesIndex = pl.shoesIndex;
+		clothesIndex = pl.clothesIndex;
 		if(pl.currentHat!=null)
 			hatName = pl.currentHat.name.ToString();
 		if(pl.currentGlass!=null)

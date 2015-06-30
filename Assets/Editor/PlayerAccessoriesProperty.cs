@@ -48,6 +48,7 @@ public class PlayerAccessoriesProperty : Editor {
 			SerializedProperty myGO = myListRef.FindPropertyRelative("go");
 			SerializedProperty myBool = myListRef.FindPropertyRelative("available");
 			SerializedProperty myType = myListRef.FindPropertyRelative("type");
+			SerializedProperty myIndex = myListRef.FindPropertyRelative("index");
 
 			if(myObjectName.stringValue !="") labelName = myObjectName.stringValue;
 			showPosition[i] = EditorGUILayout.Foldout(showPosition[i],labelName);
@@ -57,6 +58,8 @@ public class PlayerAccessoriesProperty : Editor {
 				myGO.objectReferenceValue = EditorGUILayout.ObjectField("GO",myGO.objectReferenceValue, typeof(GameObject), true);
 				myBool.boolValue = EditorGUILayout.Toggle("Is Available",myBool.boolValue);
 				EditorGUILayout.PropertyField( myType );
+				myIndex.intValue = EditorGUILayout.IntField("Index",myIndex.intValue);
+
 				// Array fields with remove at index
 				EditorGUILayout.Space ();
 				EditorGUILayout.Space ();
@@ -90,7 +93,7 @@ public class PlayerAccessoriesProperty : Editor {
 			
 			
 		}
-		
+
 		//Apply the changes to our list
 		getTarget.ApplyModifiedProperties();
 	}

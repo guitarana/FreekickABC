@@ -18,6 +18,7 @@ public class PlayerAccessoriesList : MonoBehaviour
 		public GameObject go;
 		public bool available;
 		public Type type;
+		public int index;
 	}
 
 
@@ -33,10 +34,15 @@ public class PlayerAccessoriesList : MonoBehaviour
 	public Accessories currentShoes;
 	public Accessories currentClothes;
 
-	public int hatIndex = 5;
-	public int glassIndex = 3;
-	public int shoesIndex = 3;
-	public int clothesIndex = 2;
+	public int hatIndex = 100;
+	public int glassIndex = 200;
+	public int shoesIndex = 400;
+	public int clothesIndex = 300;
+
+	private int totalHat;
+	private int totalGlasses;
+	private int totalShoes;
+	private int totalClothes;
 	// Use this for initialization
 	void Start ()
 	{
@@ -44,28 +50,28 @@ public class PlayerAccessoriesList : MonoBehaviour
 		AddGlass();
 		AddShoes();
 		AddClothes();
-		Deactive(hats);
-		Deactive(glass);
-		Deactive(shoes);
-		Deactive(clothes);
+		//Deactive(hats);
+		//Deactive(glass);
+		//Deactive(shoes);
+		Deactive(accessories);
 		hatIndex = PlayerStatistic.instance.hatIndex;
 		glassIndex = PlayerStatistic.instance.glassIndex;
 		shoesIndex = PlayerStatistic.instance.shoesIndex;
 		clothesIndex = PlayerStatistic.instance.clothesIndex;
 
-		currentHat = hats[hatIndex];
+		currentHat = FindAccessories(hatIndex);
 		currentHat.go.SetActive(true);
 
-		currentGlass = glass[glassIndex];
+		currentGlass = FindAccessories(glassIndex);
 		currentGlass.go.SetActive(true);
 
-		currentShoes = shoes[shoesIndex];
+		currentShoes = FindAccessories(shoesIndex);
 		if(currentShoes.go.GetComponent<SkinnedMeshRenderer>())
 			currentShoes.go.GetComponent<SkinnedMeshRenderer>().enabled = true;
 		else
 			currentShoes.go.SetActive(true);
 
-		currentClothes = clothes[clothesIndex];
+		currentClothes = FindAccessories(clothesIndex);
 		if(currentClothes.go.GetComponent<SkinnedMeshRenderer>())
 			currentClothes.go.GetComponent<SkinnedMeshRenderer>().enabled = true;
 		else
@@ -86,16 +92,28 @@ public class PlayerAccessoriesList : MonoBehaviour
 	
 	}
 
-	void Deactive(PlayerAccessoriesList.Accessories[] acc){
-		if(acc.Length == 0) return;
-		Debug.Log("I : "+ acc.Length);
-		for(int i=0;i<acc.Length;i++){
-			if(acc[i].go.GetComponent<SkinnedMeshRenderer>())
-				acc[i].go.GetComponent<SkinnedMeshRenderer>().enabled = false;
+	void Deactive(List<Accessories> acc){
+		foreach(Accessories ac in acc){
+			if(ac.go.GetComponent<SkinnedMeshRenderer>())
+				ac.go.GetComponent<SkinnedMeshRenderer>().enabled = false;
 			else
-				acc[i].go.SetActive(false);
+				ac.go.SetActive(false);
 		}
 
+	}
+
+	void Deactive(List<Accessories> acc,Type type){
+	
+		foreach(Accessories ac in acc){
+			if(type == ac.type){
+				if(ac.go.GetComponent<SkinnedMeshRenderer>())
+					ac.go.GetComponent<SkinnedMeshRenderer>().enabled = false;
+				else
+					ac.go.SetActive(false);
+			}
+		}
+
+		
 	}
 
 	void ActiveAcc(){
@@ -105,100 +123,90 @@ public class PlayerAccessoriesList : MonoBehaviour
 
 	public void SelectHatNext(){
 
-		if(hats.Length ==0) return;
 
-		Deactive(hats);
+		Deactive(accessories,Type.Hat);
 		hatIndex += 1;
 
-		//if(hatIndex != 0){
-		if(hatIndex >= hats.Length)
-			hatIndex = 0;
+		if(hatIndex >= 100 + totalHat)
+			hatIndex = 100;
 
-		currentHat = hats[hatIndex];
+		currentHat = FindAccessories(hatIndex);
 		if(currentHat.available){
 			currentHat.go.SetActive(true);
 			ActiveAcc();
 		}else{
 			hatIndex += 1;
+			SelectHatNext();
 		}
-		//}
 	}
 
 	public void SelectHatPrev(){
 
-		if(hats.Length ==0) return;
 
-		Deactive(hats);
+		Deactive(accessories,Type.Hat);
 		hatIndex -= 1;
 
-		//if(hatIndex != 0){
-		if(hatIndex <0)
-			hatIndex = hats.Length-1;
+		if(hatIndex <100)
+			hatIndex = 100 + totalHat-1;
 		
-		currentHat = hats[hatIndex];
+		currentHat = FindAccessories(hatIndex);
 		if(currentHat.available){
 			currentHat.go.SetActive(true);
 			ActiveAcc();
 		}else{
 			hatIndex -= 1;
+			SelectHatPrev();
 		}
 		//}
 	}
 
 	public void SelectGlassNext(){
 		
-		if(glass.Length ==0) return;
-		
-		Deactive(glass);
+			
+		Deactive(accessories,Type.Glass);
 		glassIndex += 1;
 		
-		//if(glassIndex != 0){
-		if(glassIndex >= glass.Length)
-			glassIndex = 0;
+		if(glassIndex >= 200 + totalGlasses)
+			glassIndex = 200;
 		
-		currentGlass = glass[glassIndex];
+		currentGlass = FindAccessories(glassIndex);
 		if(currentGlass.available){
 			currentGlass.go.SetActive(true);
 			ActiveAcc();
 		}else{
 			glassIndex += 1;
+			SelectGlassNext();
 		}
-		//}
 	}
 	
 	public void SelectGlassPrev(){
 		
-		if(glass.Length ==0) return;
-		
-		Deactive(glass);
+
+		Deactive(accessories,Type.Glass);
 		glassIndex -= 1;
 		
-		//if(glassIndex != 0){
-		if(glassIndex <0)
-			glassIndex = glass.Length-1;
+		if(glassIndex <200)
+			glassIndex = 200 + totalGlasses-1;
 			
-		currentGlass = glass[glassIndex];
+		currentGlass = FindAccessories(glassIndex);
 		if(currentGlass.available){
 			currentGlass.go.SetActive(true);
 			ActiveAcc();
 		}else{
 			glassIndex -= 1;
+			SelectGlassPrev();
 		}
-		//}
 	}
 
 	public void SelectShoesNext(){
 		
-		if(shoes.Length ==0) return;
-		
-		Deactive(shoes);
+		Deactive(accessories,Type.Shoes);
 		shoesIndex += 1;
 		
-		//if(shoesIndex != 0){
-		if(shoesIndex >= shoes.Length)
-			shoesIndex = 0;
+		if(shoesIndex >= 400 + totalShoes)
+			shoesIndex = 400;
 		
-		currentShoes = shoes[shoesIndex];
+		currentShoes = FindAccessories(shoesIndex);
 		if(currentShoes.available){
 			if(currentShoes.go.GetComponent<SkinnedMeshRenderer>())
 				currentShoes.go.GetComponent<SkinnedMeshRenderer>().enabled = true;
@@ -208,22 +216,20 @@ public class PlayerAccessoriesList : MonoBehaviour
 			ActiveAcc();
 		}else{
 			shoesIndex += 1;
+			SelectShoesNext();
 		}
-		//}
 	}
 	
 	public void SelectShoesPrev(){
 		
-		if(shoes.Length ==0) return;
-		
-		Deactive(shoes);
+
+		Deactive(accessories,Type.Shoes);
 		shoesIndex -= 1;
 		
-		//if(shoesIndex != 0){
-		if(shoesIndex <0)
-			shoesIndex = shoes.Length-1;
+		if(shoesIndex <400)
+			shoesIndex = 400 + totalShoes-1;
 			
-		currentShoes = shoes[shoesIndex];
+		currentShoes = FindAccessories(shoesIndex);
 		if(currentShoes.available){
 			if(currentShoes.go.GetComponent<SkinnedMeshRenderer>())
 				currentShoes.go.GetComponent<SkinnedMeshRenderer>().enabled = true;
@@ -233,22 +239,19 @@ public class PlayerAccessoriesList : MonoBehaviour
 			ActiveAcc();
 		}else{
 			shoesIndex -= 1;
+			SelectShoesPrev();
 		}
-		//}
 	}
 
 	public void SelectClothesNext(){
-		
-		if(clothes.Length ==0) return;
-		
-		Deactive(clothes);
+
+		Deactive(accessories,Type.Clothes);
 		clothesIndex += 1;
 		
-		//if(shoesIndex != 0){
-		if(clothesIndex >= clothes.Length)
-			clothesIndex = 0;
+		if(clothesIndex >= 300 +totalClothes)
+			clothesIndex = 300;
 		
-		currentClothes = clothes[clothesIndex];
+		currentClothes = FindAccessories(clothesIndex);
 		if(currentClothes.available){
 			if(currentClothes.go.GetComponent<SkinnedMeshRenderer>())
 				currentClothes.go.GetComponent<SkinnedMeshRenderer>().enabled = true;
@@ -258,22 +261,19 @@ public class PlayerAccessoriesList : MonoBehaviour
 			ActiveAcc();
 		}else{
 			clothesIndex += 1;
+			SelectClothesNext();
 		}
-		//}
 	}
 	
 	public void SelectClothesPrev(){
 		
-		if(clothes.Length ==0) return;
-		
-		Deactive(clothes);
+		Deactive(accessories,Type.Clothes);
 		clothesIndex -= 1;
 		
-		//if(shoesIndex != 0){
-		if(clothesIndex <0)
-			clothesIndex = clothes.Length-1;
+		if(clothesIndex <300)
+			clothesIndex = 300 +totalClothes-1;
 		
-		currentClothes = clothes[clothesIndex];
+		currentClothes = FindAccessories(clothesIndex);
 		if(currentClothes.available){
 			if(currentClothes.go.GetComponent<SkinnedMeshRenderer>())
 				currentClothes.go.GetComponent<SkinnedMeshRenderer>().enabled = true;
@@ -283,112 +283,92 @@ public class PlayerAccessoriesList : MonoBehaviour
 			ActiveAcc();
 		}else{
 			clothesIndex -= 1;
+			SelectClothesPrev();
 		}
-		//}
 	}
 
 
 
 	int counter;
 	void AddHat(){
-		counter = 0;
+		counter = 100;
 		foreach(Accessories ac in accessories){
 			if(ac.type == Type.Hat){
-				//if(ac.available){
-					counter +=1;
-				//}
-			}
-		}
-		hats = new Accessories[counter];
-		counter = 0;
-		foreach(Accessories ac in accessories){
-			if(ac.type == Type.Hat){
-				//if(ac.available){
-				hats[counter] = ac;
-				hats[counter].available = false;
+				totalHat +=1;
+				ac.available = false;
+				FindAccessories(100).available = true;
 				if(PlayerStatistic.instance.availableHatIndex.Contains(counter)){
-					hats[counter].available = true;
+					FindAccessories(counter).available = true;
 				}
 				counter +=1;
-				//}
 			}
 		}
 
 	}
 
 	void AddGlass(){
-		counter = 0;
+		counter = 200;
 		foreach(Accessories ac in accessories){
 			if(ac.type == Type.Glass){
-				//if(ac.available){
-					counter +=1;
-				//}
-			}
-		}
-		glass = new Accessories[counter];
-		counter = 0;
-		foreach(Accessories ac in accessories){
-			if(ac.type == Type.Glass){
-				//if(ac.available){
-				glass[counter] = ac;
-				glass[counter].available = false;
+				totalGlasses +=1;
+				ac.available = false;
+				FindAccessories(200).available = true;
 				if(PlayerStatistic.instance.availableGlassIndex.Contains(counter)){
-					glass[counter].available = true;
+					FindAccessories(counter).available = true;
 				}
 				counter +=1;
-				//}
 			}
 		}
 	}
 
 	void AddShoes(){
-		counter = 0;
+		counter = 400;
 		foreach(Accessories ac in accessories){
 			if(ac.type == Type.Shoes){
-				//if(ac.available){
-					counter +=1;
-				//}
-			}
-		}
-		shoes = new Accessories[counter];
-		counter = 0;
-		foreach(Accessories ac in accessories){
-			if(ac.type == Type.Shoes){
-				//if(ac.available){
-				shoes[counter] = ac;
-				shoes[counter].available = false;
+				totalShoes +=1;
+				ac.available = false;
+				FindAccessories(400).available = true;
 				if(PlayerStatistic.instance.availableShoesIndex.Contains(counter)){
-					shoes[counter].available = true;
+					FindAccessories(counter).available = true;
 				}
 				counter +=1;
-				//}
 			}
 		}
 	}
 
 	void AddClothes(){
-		counter = 0;
+		counter = 300;
 		foreach(Accessories ac in accessories){
 			if(ac.type == Type.Clothes){
-				//if(ac.available){
-				counter +=1;
-				//}
-			}
-		}
-		clothes = new Accessories[counter];
-		counter = 0;
-		foreach(Accessories ac in accessories){
-			if(ac.type == Type.Clothes){
-				//if(ac.available){
-				clothes[counter] = ac;
-				clothes[counter].available = false;
+				totalClothes +=1;
+				ac.available = false;
+				FindAccessories(300).available = true;
 				if(PlayerStatistic.instance.availableClothesIndex.Contains(counter)){
-					clothes[counter].available = true;
+					FindAccessories(counter).available = true;
 				}
 				counter +=1;
-				//}
 			}
 		}
+	}
+
+	public Accessories FindAccessories(int index)
+	{
+		List<Accessories> list = accessories;
+		Accessories acc = list.Find(
+			delegate(Accessories ac)
+			{
+			return ac.index == index;
+		}
+		);
+		if (acc != null)
+		{
+			return acc;
+		}
+		else
+		{
+			return null;
+		}
+		return null;
 	}
 }
 
