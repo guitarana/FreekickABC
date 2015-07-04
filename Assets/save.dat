@@ -1,0 +1,24 @@
+$playerstat {
+username Player;
+globallevel 0;
+xpgain 1;
+xpremaining 15;
+availableHatIndex 100;
+availableHatIndex 101;
+availableHatIndex 102;
+availableHatIndex 103;
+availableHatIndex 104;
+availableHatIndex 105;
+availableGlassIndex 200;
+availableGlassIndex 201;
+availableGlassIndex 202;
+availableGlassIndex 203;
+availableClothesIndex 300;
+availableClothesIndex 301;
+availableClothesIndex 302;
+availableShoesIndex 400;
+availableShoesIndex 401;
+availableShoesIndex 402;
+availableShoesIndex 403;
+availableShoesIndex 404;
+}

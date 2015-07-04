@@ -120,7 +120,7 @@ public class PlayerStatistic : MonoBehaviour
 	}
 
 	public void SaveGame(){
-		string file = Path.GetFullPath(Application.persistentDataPath + "/save.dat");
+		string file = Path.GetFullPath(Application.dataPath + "/save.dat");
 		Save(file);
 	}
 		
@@ -158,10 +158,26 @@ public class PlayerStatistic : MonoBehaviour
 			//			Debug.Log("SAVE: Saving game ...");
 			
 			sw.WriteLine("$playerstat {");
-			sw.WriteLine("username \"" + username + "\";");
-			sw.WriteLine("globallevel \"" + globalLevel + "\";");
-			sw.WriteLine("xpgain \"" + xpGain + "\";");
-			sw.WriteLine("xpremaining \"" + xpRemaining + "\";");
+			sw.WriteLine("username " + username + ";");
+			sw.WriteLine("globallevel " + globalLevel + ";");
+			sw.WriteLine("xpgain " + xpGain + ";");
+			sw.WriteLine("xpremaining " + xpRemaining + ";");
+		
+			foreach(int i in availableHatIndex){
+				sw.WriteLine("availableHatIndex " + i + ";"); 
+			}
+
+			foreach(int i in availableGlassIndex){
+				sw.WriteLine("availableGlassIndex " + i + ";"); 
+			}
+
+			foreach(int i in availableClothesIndex){
+				sw.WriteLine("availableClothesIndex " + i + ";"); 
+			}
+
+			foreach(int i in availableShoesIndex){
+				sw.WriteLine("availableShoesIndex " + i + ";"); 
+			}
 
 			sw.WriteLine("}");
 			
@@ -169,12 +185,12 @@ public class PlayerStatistic : MonoBehaviour
 			
 			//ms.Position = 0;
 			byte[] data = ms.ToArray();
-			byte[] atad = Crypt(data);
+			//byte[] atad = Crypt(data);
 			
 			//xxx
 			using (FileStream fs = new FileStream(file_new, FileMode.Create, FileAccess.Write)) {
 				//fs.Write(data, 0, data.Length);
-				fs.Write(atad, 0, atad.Length);
+				fs.Write(data, 0, data.Length);
 			}
 		}
 		
@@ -205,9 +221,32 @@ public class PlayerStatistic : MonoBehaviour
 	}
 
 	public void LoadGame() {
-		string path = Path.GetFullPath(Application.persistentDataPath + "/save.dat");
+		string path = Path.GetFullPath(Application.dataPath + "/save.dat");
 		if(File.Exists(path))
 			parser (path);
+	}
+
+	public void LoadData(string[] s){
+		if(s.Length <2)
+			return;
+		switch(s[0]){
+		case "username":
+			break;
+		case "globallevel":
+			break;
+		case "xpgain":
+			break;
+		case "xpremaining":
+			break;
+		case "availableHatIndex":
+			break;
+		case "availableGlassIndex":
+			break;
+		case "availableClothesIndex":
+			break;
+		case "availableShoesIndex":
+			break;
+		}
 	}
 
 	void parser(string dataTemp){
