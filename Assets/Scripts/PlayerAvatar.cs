@@ -27,10 +27,15 @@ public class PlayerAvatar : MonoBehaviour
 	public SubState substate = SubState.Init;
 	
 	public Animation anim;
+	public AudioClip shootSFX;
+	public AudioClip grassSFX;
+	private AudioSource audioSource;
+
 	// Use this for initialization
 	void Start ()
 	{
 		anim = gameObject.GetComponent<Animation> ();
+		audioSource = gameObject.GetComponent<AudioSource> ();
 		instance = this;
 		aiState = AIState.Idle;
 		
@@ -90,6 +95,8 @@ public class PlayerAvatar : MonoBehaviour
 		if (substate == SubState.Active) {
 			timer += Time.deltaTime;
 			if(timer >= anim.GetClip("Shoot").length -1.4f){
+				audioSource.PlayOneShot(shootSFX);
+				audioSource.PlayOneShot(grassSFX);
 				GameManager.instance.grassFX.Emit(10);
 				timer = 0;
 				GameState.instance.isShooting = true;
