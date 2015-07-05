@@ -43,9 +43,12 @@ public class GameManager : MonoBehaviour {
 	public BlockerManager block;
 	public int totalBlocker =2;
 
-
+	public AudioClip goalNotif;
+	private AudioSource aud;
 	// Use this for initialization
 	void Start () {
+		aud = GetComponent<AudioSource>();
+
 		instance = this;
 		Physics.IgnoreLayerCollision(8,8); //IGNORE BALLS COLLIDING WITH OTHER BALLS
 		Reset ();
@@ -74,6 +77,8 @@ public class GameManager : MonoBehaviour {
 	public float timer=0;
 	private float timer2=0;
 	public float maxTime = 60;
+
+
 
 	void DoArcade(){
 
@@ -105,9 +110,10 @@ public class GameManager : MonoBehaviour {
 		if(substate == SubState.Deactive){
 
 			if(GameState.instance.isGoal){
+				aud.PlayOneShot(goalNotif);
 				ballStock +=1;
 				goalCounter +=1;
-				score = goalCounter*10;
+				score = score + goalCounter*10;
 				timer2 =0;
 				PlayerStatistic.instance.xpGain = goalCounter;
 				substate = SubState.Finish;

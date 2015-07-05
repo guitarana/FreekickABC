@@ -43,9 +43,14 @@ public class PlayerAccessoriesList : MonoBehaviour
 	private int totalGlasses;
 	private int totalShoes;
 	private int totalClothes;
+
+	private AudioSource aud;
+	public AudioClip sfx;
 	// Use this for initialization
 	void Start ()
 	{
+		aud = GetComponent<AudioSource>();
+		sfx = aud.clip;
 		AddHat();
 		AddGlass();
 		AddShoes();
@@ -123,7 +128,7 @@ public class PlayerAccessoriesList : MonoBehaviour
 
 	public void SelectHatNext(){
 
-
+		aud.PlayOneShot(sfx);
 		Deactive(accessories,Type.Hat);
 		hatIndex += 1;
 
@@ -142,6 +147,7 @@ public class PlayerAccessoriesList : MonoBehaviour
 
 	public void SelectHatPrev(){
 
+		aud.PlayOneShot(sfx);
 
 		Deactive(accessories,Type.Hat);
 		hatIndex -= 1;
@@ -162,7 +168,8 @@ public class PlayerAccessoriesList : MonoBehaviour
 
 	public void SelectGlassNext(){
 		
-			
+		aud.PlayOneShot(sfx);
+
 		Deactive(accessories,Type.Glass);
 		glassIndex += 1;
 		
@@ -181,6 +188,7 @@ public class PlayerAccessoriesList : MonoBehaviour
 	
 	public void SelectGlassPrev(){
 		
+		aud.PlayOneShot(sfx);
 
 		Deactive(accessories,Type.Glass);
 		glassIndex -= 1;
@@ -199,7 +207,9 @@ public class PlayerAccessoriesList : MonoBehaviour
 	}
 
 	public void SelectShoesNext(){
-		
+
+		aud.PlayOneShot(sfx);
+
 		Deactive(accessories,Type.Shoes);
 		shoesIndex += 1;
 		
@@ -222,6 +232,7 @@ public class PlayerAccessoriesList : MonoBehaviour
 	
 	public void SelectShoesPrev(){
 		
+		aud.PlayOneShot(sfx);
 
 		Deactive(accessories,Type.Shoes);
 		shoesIndex -= 1;
@@ -244,6 +255,7 @@ public class PlayerAccessoriesList : MonoBehaviour
 	}
 
 	public void SelectClothesNext(){
+		aud.PlayOneShot(sfx);
 
 		Deactive(accessories,Type.Clothes);
 		clothesIndex += 1;
@@ -266,7 +278,8 @@ public class PlayerAccessoriesList : MonoBehaviour
 	}
 	
 	public void SelectClothesPrev(){
-		
+		aud.PlayOneShot(sfx);
+
 		Deactive(accessories,Type.Clothes);
 		clothesIndex -= 1;
 		

@@ -1,7 +1,7 @@
 $playerstat {
 username Player;
 globallevel 0;
-xpgain 1;
+xpgain 0;
 xpremaining 15;
 availableHatIndex 100;
 availableHatIndex 101;
