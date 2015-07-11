@@ -14,6 +14,7 @@ public class GameState : MonoBehaviour
 	public bool isCameraDamping;
 	public bool isCameraStatic;
 	public bool isCelebrating;
+	public bool isDisableFlick;
 	// Use this for initialization
 	void Start ()
 	{

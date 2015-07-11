@@ -1,6 +1,6 @@
-$playerstat {
+$actor playerstat {
 username Player;
-globallevel 0;
+globallevel 75;
 xpgain 0;
 xpremaining 15;
 availableHatIndex 100;

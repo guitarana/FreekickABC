@@ -19,11 +19,10 @@ public class PlayerStatistic : MonoBehaviour
 				if (go != null) {
 					DontDestroyOnLoad(go);
 					_instance = go.GetComponent<PlayerStatistic>();
-					Debug.Log("GET PLAYERSTAT");
+
 				}
 				if (_instance == null) {
 					#if UNITY_EDITOR
-					Debug.Log("/*UIMGR*/ ERROR: Can't create PLAYERSTAT object");
 					Debug.Break();
 					#else
 					// = fatal error in release build
@@ -44,6 +43,7 @@ public class PlayerStatistic : MonoBehaviour
 	public void Init()
 	{
 		/* Initialization */
+
 	}
 
 	//Global Stat
@@ -84,6 +84,7 @@ public class PlayerStatistic : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
+
 		availableHatIndex.Add (100);
 		availableGlassIndex.Add (200);
 		availableShoesIndex.Add (400);
@@ -120,7 +121,7 @@ public class PlayerStatistic : MonoBehaviour
 	}
 
 	public void SaveGame(){
-		string file = Path.GetFullPath(Application.dataPath + "/save.dat");
+		string file = Path.GetFullPath(Application.persistentDataPath + "/save.dat");
 		Save(file);
 	}
 		
@@ -141,9 +142,7 @@ public class PlayerStatistic : MonoBehaviour
 	}
 
 	public void Save(string file) {
-		
-		Debug.Log("PlayerStat.cs: #SAVE#");
-		
+
 		string file_new = file + ".new";
 		string file_old = file + ".old";
 		
@@ -157,7 +156,7 @@ public class PlayerStatistic : MonoBehaviour
 			
 			//			Debug.Log("SAVE: Saving game ...");
 			
-			sw.WriteLine("$playerstat {");
+			sw.WriteLine("$actor playerstat {");
 			sw.WriteLine("username " + username + ";");
 			sw.WriteLine("globallevel " + globalLevel + ";");
 			sw.WriteLine("xpgain " + xpGain + ";");
@@ -196,7 +195,6 @@ public class PlayerStatistic : MonoBehaviour
 		
 		if (!File.Exists(file_new)) {
 			// can't write save game
-			Debug.Log("SAVE: ERROR: Can't write save game! " + file_new);
 		} else {
 			// remove the older save
 			if (File.Exists(file_old)) {
@@ -220,10 +218,34 @@ public class PlayerStatistic : MonoBehaviour
 		
 	}
 
+	public void Load(string file) {
+		
+
+		// check if it is exist first
+		if (!File.Exists(file)) {
+			// check older save
+				return;
+		}
+		Function obj = null;
+		SaveScript playerStat = null;
+		playerStat = new SaveScript(file);
+		foreach(string key in playerStat.objects.Keys){
+			if(key.Contains("playerstat")){
+				obj = playerStat.objects[key];
+				if(obj.statements != null){
+					foreach(Statement s in obj.statements){
+						LoadData(s.command);
+					}
+				}
+			}
+		}
+	}
+
 	public void LoadGame() {
-		string path = Path.GetFullPath(Application.dataPath + "/save.dat");
+
+		string path = Path.GetFullPath(Application.persistentDataPath + "/save.dat");
 		if(File.Exists(path))
-			parser (path);
+			Load(path);
 	}
 
 	public void LoadData(string[] s){
@@ -231,99 +253,32 @@ public class PlayerStatistic : MonoBehaviour
 			return;
 		switch(s[0]){
 		case "username":
+			username = s[1];
 			break;
 		case "globallevel":
+			globalLevel = int.Parse(s[1]);
 			break;
 		case "xpgain":
+			xpGain = int.Parse(s[1]);
 			break;
 		case "xpremaining":
+			xpRemaining = int.Parse(s[1]);
 			break;
 		case "availableHatIndex":
+			availableHatIndex.Add(int.Parse(s[1]));
 			break;
 		case "availableGlassIndex":
+			availableGlassIndex.Add(int.Parse(s[1]));
 			break;
 		case "availableClothesIndex":
+			availableClothesIndex.Add(int.Parse(s[1]));
 			break;
 		case "availableShoesIndex":
+			availableShoesIndex.Add(int.Parse(s[1]));
 			break;
 		}
 	}
 
-	void parser(string dataTemp){
-		Script script = new Script(dataTemp, true);
-		
-		Script.TokenType tokentType = Script.TokenType.Null;
-		List<string> line = new List<string>();
-		string[] a = null;
-		string token = null;
-		int bc = 0, ac = 0, sc = 0;
-		
-		do {
-			tokentType = script.ReadToken();
-			
-			switch (tokentType) {
-				
-			case Script.TokenType.Null:
-				//return;
-				break;
-				
-			case Script.TokenType.Empty:
-				line.Add("null");
-				break;
-				
-			case Script.TokenType.String:
-				token = script.GetToken();
-				line.Add(token);
-				break;
-				
-			case Script.TokenType.SemiColon:
-
-
-				sc++;
-				
-				break;
-				
-			case Script.TokenType.OpenBrace:
-				bc++;
-				a = line.ToArray(); line.Clear();
-				if (a[0] == "username") {
-					username = a[1];
-					//--// Debug.Log (enviAreas);
-					ac++;
-				}
-
-				if (a[0] == "globallevel") {
-					globalLevel = int.Parse(a[1]);
-					//--// Debug.Log (enviAreas);
-					ac++;
-				}
-
-				if (a[0] == "xpgain") {
-					xpGain = int.Parse(a[1]);
-					//--// Debug.Log (enviAreas);
-					ac++;
-				}
-
-				if (a[0] == "xpremaining") {
-					xpRemaining = int.Parse(a[1]);
-					//--// Debug.Log (enviAreas);
-					ac++;
-				}
-
-				break;
-				
-			case Script.TokenType.CloseBrace:
-				
-				break;
-				
-			case Script.TokenType.EOF:
-				break;
-				
-			}
-			//			enviObject.add(eo);
-		} while (!script.eof);
-		
-	}
 
 
 

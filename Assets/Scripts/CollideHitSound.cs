@@ -2,10 +2,10 @@
 using System.Collections;
 
 public class CollideHitSound : MonoBehaviour {
-	AudioSource audio;
+	AudioSource aud;
 	
 	void Start() {
-		audio = GetComponent<AudioSource>();
+		aud = GetComponent<AudioSource>();
 	}
 	
 	void OnCollisionEnter(Collision collision) {
@@ -13,7 +13,7 @@ public class CollideHitSound : MonoBehaviour {
 			Debug.DrawRay(contact.point, contact.normal, Color.white);
 		}
 		if (collision.relativeVelocity.magnitude > 2)
-			audio.Play();
+			aud.Play();
 		
 	}
 }

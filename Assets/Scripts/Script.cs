@@ -2,7 +2,6 @@
 using System;
 using System.IO;
 using System.Text;
-using System.Security.Cryptography;
 
 public class Script {
 
@@ -34,39 +33,23 @@ public class Script {
 		_eof = true;
 	}
 
-	private static byte[] key = new byte[8] {0x44,0x72,0x65,0x61,0x64,0x4F,0x75,0x74}; 
-
-	public static byte[] Crypt(byte[] data)
-	{
-		SymmetricAlgorithm algorithm = DES.Create();
-		ICryptoTransform transform = algorithm.CreateEncryptor(key, key);
-		return transform.TransformFinalBlock(data, 0, data.Length);
-	}
-	
-	public static byte[] Decrypt(byte[] data)
-	{
-		SymmetricAlgorithm algorithm = DES.Create();
-		ICryptoTransform transform = algorithm.CreateDecryptor(key, key);
-		return transform.TransformFinalBlock(data, 0, data.Length);
-	}
-
 	public Script(string scriptFile, bool encrypted = false, bool cloud = false)
 	{
 		_error = true;
 		_eof = true;
 		try {
 			if (encrypted) {
-				byte[] atad = File.ReadAllBytes(scriptFile);
-				byte[] data = Decrypt(atad);
-				//--// Debug.Log(data.Length + " " + atad.Length);
-				//string file = Encoding.ASCII.GetString(data);
-				//s = file.ToCharArray();
-				//k = file.Length;
-				MemoryStream ms = new MemoryStream(data);
-				StreamReader sr = new StreamReader(ms);
-				string file = sr.ReadToEnd();
-				s = file.ToCharArray();
-				k = file.Length;
+//				byte[] atad = File.ReadAllBytes(scriptFile);
+//				byte[] data = PlayerStatistic.instance.Decrypt(atad);
+//				//--// Debug.Log(data.Length + " " + atad.Length);
+//				//string file = Encoding.ASCII.GetString(data);
+//				//s = file.ToCharArray();
+//				//k = file.Length;
+//				MemoryStream ms = new MemoryStream(data);
+//				StreamReader sr = new StreamReader(ms);
+//				string file = sr.ReadToEnd();
+//				s = file.ToCharArray();
+//				k = file.Length;
 			} else {
 			using(StreamReader sr = new StreamReader(scriptFile)) {
 				string file = sr.ReadToEnd();

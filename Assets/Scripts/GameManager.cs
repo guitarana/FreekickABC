@@ -395,6 +395,7 @@ public class GameManager : MonoBehaviour {
 		ball = Instantiate(ballTemp);
 		ball.GetComponent<Rigidbody> ().isKinematic = true; 
 		GameState.instance.isCelebrating = false;
+
 		Controller.instance.ball = ball;
 		mainCamera.target = ball.transform;
 		mainCamera.isDamping = false;
@@ -412,7 +413,7 @@ public class GameManager : MonoBehaviour {
 		swingOff.ballIn = false;
 		GameState.instance.isFlyBall = false;
 		GameState.instance.isCameraDamping = false;
-
+		GameState.instance.isDisableFlick = false;
 
 		keeper.aiState = GoalKeeperAI.AIState.Idle;
 		keeper.substate = GoalKeeperAI.SubState.Init;

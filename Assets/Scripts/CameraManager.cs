@@ -55,8 +55,6 @@ public class CameraManager : MonoBehaviour
 	
 
 		angle =  GoalOrientation.instance.angle;
-		Debug.Log("angle : "+ angle);
-		Debug.Log("normal : "+ target2.transform.forward);
 
 		if(GameState.instance.isCelebrating){
 			transform.LookAt(target.transform);

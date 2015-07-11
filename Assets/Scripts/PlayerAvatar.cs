@@ -31,12 +31,17 @@ public class PlayerAvatar : MonoBehaviour
 	public AudioClip grassSFX;
 	private AudioSource audioSource;
 
+	void Awake(){
+		instance = this;
+	}
+
 	// Use this for initialization
 	void Start ()
 	{
+
 		anim = gameObject.GetComponent<Animation> ();
 		audioSource = gameObject.GetComponent<AudioSource> ();
-		instance = this;
+
 		aiState = AIState.Idle;
 		
 	}
@@ -71,6 +76,7 @@ public class PlayerAvatar : MonoBehaviour
 		
 		if (substate == SubState.Active) {
 			if(GameState.instance.isAiming){
+				GameState.instance.isDisableFlick = true;
 				substate = SubState.Deactive;
 			}
 		}
@@ -95,6 +101,7 @@ public class PlayerAvatar : MonoBehaviour
 		if (substate == SubState.Active) {
 			timer += Time.deltaTime;
 			if(timer >= anim.GetClip("Shoot").length -1.4f){
+
 				audioSource.PlayOneShot(shootSFX);
 				audioSource.PlayOneShot(grassSFX);
 				GameManager.instance.grassFX.Emit(10);
@@ -103,11 +110,15 @@ public class PlayerAvatar : MonoBehaviour
 				substate = SubState.Deactive;
 			}
 
+
+
+
 		}
 		
 		if (substate == SubState.Deactive) {
 			timer += Time.deltaTime;
 			if(timer >= 0.5f){
+					
 				timer = 0;
 				substate = SubState.Finish;
 			}
