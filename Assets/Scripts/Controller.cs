@@ -92,7 +92,7 @@ public class Controller : MonoBehaviour
 						switch (GetDirection2 ()) {
 						case "UP ":
 
-							ball.GetComponent<ConstantForce> ().force = new Vector3 (0, GetLength2 ()*sensitivity /Screen.width, 0);
+							ball.GetComponent<ConstantForce> ().force = new Vector3 (0, GetLength2 ()*sensitivity , 0);
 							break;
 						case "DOWN ":
 
@@ -100,11 +100,11 @@ public class Controller : MonoBehaviour
 							break;
 						case "RIGHT ":
 
-							ball.GetComponent<ConstantForce> ().force = Quaternion.Euler(0, CameraManager.instance.angle/2, 0) * new Vector3 (0, 0, GetLength2 ()*sensitivity /Screen.width);
+							ball.GetComponent<ConstantForce> ().force = Quaternion.Euler(0, CameraManager.instance.angle/2, 0) * new Vector3 (0, 0, GetLength2 ()*sensitivity );
 							break;
 						case "LEFT ":
 						
-							ball.GetComponent<ConstantForce> ().force = Quaternion.Euler(0, CameraManager.instance.angle/2, 0) * new Vector3 (0, 0, -GetLength2 ()*sensitivity /Screen.width);
+							ball.GetComponent<ConstantForce> ().force = Quaternion.Euler(0, CameraManager.instance.angle/2, 0) * new Vector3 (0, 0, -GetLength2 ()*sensitivity );
 							break;
 							
 							}

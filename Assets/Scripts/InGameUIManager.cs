@@ -117,6 +117,7 @@ public class InGameUIManager : MonoBehaviour
 			}
 
 			PlayerStatistic.instance.SaveGame();
+			StartCoroutine(CloudDataController.instance.PostStats());
 			panelStartGame.SetActive(true);
 			substate = SubState.Active;
 		}

@@ -53,10 +53,11 @@ public class PlayerStatistic : MonoBehaviour
 	public int credit = 1000000;
 
 	//Player Game Stat
+	public int uniqueid = 242342354;
 	public string username = "Player";
 	public int globalLevel;
 	public int xpGain;
-	public int xpRemaining = 15;
+	public int xpRemaining = 20;
 	public int globalXPGain;
 
 	//Cosmetic
@@ -68,7 +69,7 @@ public class PlayerStatistic : MonoBehaviour
 	public List<int> availableGlassIndex = new List<int>();
 	public List<int> availableShoesIndex = new List<int>();
 	public List<int> availableClothesIndex = new List<int>();
-
+	
 
 	//Local GameMode Stat
 	public int targetScore;
@@ -103,7 +104,8 @@ public class PlayerStatistic : MonoBehaviour
 				availableClothesIndex.Add(i);
 			}
 		}
-		LoadGame();
+		//LoadGame();
+		CloudDataController.instance.UpdateStat();
 	}
 	
 	// Update is called once per frame
