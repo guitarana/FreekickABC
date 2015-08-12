@@ -3,14 +3,52 @@ using System.Collections;
 using System.Collections.Generic;
 public class CloudDataController : MonoBehaviour
 {
-	public static CloudDataController instance;
+	public static CloudDataController _instance;
+
+	public static CloudDataController instance {
+		get {
+			if (_instance == null) {
+				GameObject go = FindObjectOfType(typeof(CloudDataController)) as GameObject;
+				if (go == null)
+					go = new GameObject("@CLOUD", typeof(CloudDataController));
+				if (go != null) {
+					DontDestroyOnLoad(go);
+					_instance = go.GetComponent<CloudDataController>();
+					
+				}
+				if (_instance == null) {
+					#if UNITY_EDITOR
+					Debug.Break();
+					#else
+					// = fatal error in release build
+					Debug.LogError("/*UIMGR*/ ERROR: Can't create LevelManager object");
+					Application.Quit();
+					#endif
+				}
+			}
+			return _instance;
+		}
+	}
+
 
     private string secretKey = "freeKickABC"; // Edit this value and make sure it's the same as the one stored on the server
     public string addScoreURL = "http://localhost/TestServerSide/addscore.php?"; //be sure to add a ? to your url
     public string highscoreURL = "http://localhost/TestServerSide/display.php";
 	public string addStatsURL = "http://localhost/TestServerSide/addstats.php?";
+	public string setStatsURL = "http://localhost/TestServerSide/setstats.php?";
 	public string getStatsURL = "http://localhost/TestServerSide/getstats.php?";
 	public string getDataURL = "http://localhost/TestServerSide/getdata.php?";
+	public void Create()
+	{
+		/* SHOULD BE EMPTY */
+	}
+	
+	public void Init()
+	{
+		/* Initialization */
+		
+	}
+
 
 	private string _uniqueid = "0";
 	private string _credit = "1000000";
@@ -29,32 +67,21 @@ public class CloudDataController : MonoBehaviour
 
     void Start()
     {
-		instance = this;
 		DontDestroyOnLoad(this);
-       // StartCoroutine(GetScores());
-    }
+		StartCoroutine(LoadExistingUserData(PlayerStatistic.instance.uniqueid));
+	}
 
 	private int dataCount;
 	private bool dataLoaded;
 	public void UpdateStat(){
-		StartCoroutine(CheckExistingUser(PlayerStatistic.instance.uniqueid));
-		//if(userExist){
-			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetName"));
-			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetLevel"));
-			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetXPGain"));
-			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetXPRemaining"));
-			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetHat"));
-			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetGlass"));
-			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetClothes"));
-			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetShoes"));
-			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetCredits"));
+		StartCoroutine(LoadExistingUserData(PlayerStatistic.instance.uniqueid));
 
-		//}
 	}
 
 	public void SetStat(){
-		UpdateStat();
-		StartCoroutine(PostStats());
+		//UpdateStat();
+		StartCoroutine(CheckExistingUser(PlayerStatistic.instance.uniqueid));
+
 	}
 
  
@@ -98,71 +125,85 @@ public class CloudDataController : MonoBehaviour
 	// remember to use StartCoroutine when calling this function!
 	public IEnumerator PostStats()
 	{
+
 		if(errorDownload){
 			Debug.Log("Check Your Connectivity");
 			yield break;
 		}
 		yield return (dataDownloaded == true);
 
+
+
+		_uniqueid = PlayerStatistic.instance.uniqueid.ToString();
+		_credit = PlayerStatistic.instance.credit.ToString();
+		_username = PlayerStatistic.instance.username;
+		_globalLevel = PlayerStatistic.instance.globalLevel.ToString();
+		_xpGain = PlayerStatistic.instance.xpGain.ToString();
+		_xpRemaining = PlayerStatistic.instance.xpRemaining.ToString();
+
+
+
+		_availableHat = "";
+		_availableGlass = "";
+		_availableClothes = "";
+		_availableShoes = "";
+
+		foreach(int li in PlayerStatistic.instance.availableHatIndex){
+			_availableHat = _availableHat + li.ToString();
+		}
+		foreach(int li in PlayerStatistic.instance.availableGlassIndex){
+			_availableGlass = _availableGlass + li.ToString();
+		}
+		foreach(int li in PlayerStatistic.instance.availableClothesIndex){
+			_availableClothes = _availableClothes + li.ToString();
+		}
+		foreach(int li in PlayerStatistic.instance.availableShoesIndex){
+			_availableShoes = _availableShoes + li.ToString();
+		}
+
+		//This connects to a server side php script that will add the name and score to a MySQL DB.
+		// Supply it with a string representing the players name and the players score.
+		string hash = MD5S.Md5Sum(_uniqueid + _username + _globalLevel + _xpGain + _xpRemaining
+		                          + _availableHat + _availableGlass + _availableClothes + _availableShoes   + _credit + secretKey);
+		string post_url;
 		if(!userExist){
-
-			_uniqueid = PlayerStatistic.instance.uniqueid.ToString();
-			_credit = PlayerStatistic.instance.credit.ToString();
-			_username = PlayerStatistic.instance.username;
-			_globalLevel = PlayerStatistic.instance.globalLevel.ToString();
-			_xpGain = PlayerStatistic.instance.xpGain.ToString();
-			_xpRemaining = PlayerStatistic.instance.xpRemaining.ToString();
-
-
-
-			_availableHat = "";
-			_availableGlass = "";
-			_availableClothes = "";
-			_availableShoes = "";
-
-			foreach(int li in PlayerStatistic.instance.availableHatIndex){
-				_availableHat = _availableHat + li.ToString();
-			}
-			foreach(int li in PlayerStatistic.instance.availableGlassIndex){
-				_availableGlass = _availableGlass + li.ToString();
-			}
-			foreach(int li in PlayerStatistic.instance.availableClothesIndex){
-				_availableClothes = _availableClothes + li.ToString();
-			}
-			foreach(int li in PlayerStatistic.instance.availableShoesIndex){
-				_availableShoes = _availableShoes + li.ToString();
-			}
-
-			//This connects to a server side php script that will add the name and score to a MySQL DB.
-			// Supply it with a string representing the players name and the players score.
-			string hash = MD5S.Md5Sum(_uniqueid + _username + _globalLevel + _xpGain + _xpRemaining
-			                          + _availableHat + _availableGlass + _availableClothes + _availableShoes   + _credit + secretKey);
-
-			string post_url = addStatsURL 
+			post_url = addStatsURL 
 				+ "uniqueid=" +  _uniqueid
 				+ "&username=" + WWW.EscapeURL(_username) 
 				+ "&globallevel=" +  _globalLevel
 				+ "&xpGain=" +  _xpGain
-				+ "&xpremaining=" +  _xpRemaining
+				+ "&xpRemaining=" +  _xpRemaining
 				+ "&availableHatIndex=" + WWW.EscapeURL(_availableHat)
 				+ "&availableGlassIndex=" + WWW.EscapeURL(_availableGlass)
 				+ "&availableClothesIndex=" + WWW.EscapeURL(_availableClothes)
 				+ "&availableShoesIndex=" + WWW.EscapeURL(_availableShoes)
 				+ "&credits=" + _credit
 				+ "&hash=" + hash;
-
-			Debug.Log (post_url);
-			// Post the URL to the site and create a download object to get the result.
-			WWW hs_post = new WWW(post_url);
-			yield return hs_post; // Wait until the download is done
-			Debug.Log ("PostSucceed");
-			if (hs_post.error != null)
-			{
-				print("There was an error posting the high score: " + hs_post.error);
-			}
 		}else{
-
+			post_url = setStatsURL 
+				+ "uniqueid=" +  _uniqueid
+				+ "&username=" + WWW.EscapeURL(_username) 
+				+ "&globallevel=" +  _globalLevel
+				+ "&xpGain=" +  _xpGain
+				+ "&xpRemaining=" +  _xpRemaining
+				+ "&availableHatIndex=" + WWW.EscapeURL(_availableHat)
+				+ "&availableGlassIndex=" + WWW.EscapeURL(_availableGlass)
+				+ "&availableClothesIndex=" + WWW.EscapeURL(_availableClothes)
+				+ "&availableShoesIndex=" + WWW.EscapeURL(_availableShoes)
+				+ "&credits=" + _credit
+				+ "&hash=" + hash;
 		}
+
+		Debug.Log (post_url);
+		// Post the URL to the site and create a download object to get the result.
+		WWW hs_post = new WWW(post_url);
+		yield return hs_post; // Wait until the download is done
+		Debug.Log ("PostSucceed");
+		if (hs_post.error != null)
+		{
+			print("There was an error posting the high score: " + hs_post.error);
+		}
+	
 		dataDownloaded = false;
 	}
 
@@ -185,7 +226,42 @@ public class CloudDataController : MonoBehaviour
 				userExist = false;
 			}
 		}
+		StartCoroutine(PostStats());
+		dataDownloaded = true;
+	}
 
+	public IEnumerator LoadExistingUserData(int userid){
+		WWW user_get = new WWW(getStatsURL + "uniqueid=" +  userid);
+		yield return user_get;
+		errorDownload = false;
+		Debug.Log(getStatsURL +"uniquid=" + userid);
+		if (user_get.error != null)
+		{
+			errorDownload = true;
+			print("There was an error getting userdata " + user_get.error);
+		}
+		else
+		{
+			if(user_get.text == "Exist"){
+				userExist = true;
+			}else{
+				userExist = false;
+			}
+		}
+
+		if(userExist){
+			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetName"));
+			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetLevel"));
+			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetXPGain"));
+			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetXPRemaining"));
+			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetHat"));
+			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetGlass"));
+			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetClothes"));
+			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetShoes"));
+			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetCredits"));
+			
+		}
+		
 		dataDownloaded = true;
 	}
 
@@ -209,17 +285,17 @@ public class CloudDataController : MonoBehaviour
 			if(func == "GetLevel")
 				PlayerStatistic.instance.globalLevel =int.Parse(user_get.text);
 			if(func == "GetXPGain")
-				PlayerStatistic.instance.xpGain = int.Parse(user_get.text);
+				PlayerStatistic.instance.globalXPGain = int.Parse(user_get.text);
 			if(func == "GetXPRemaining")
 				PlayerStatistic.instance.xpRemaining = int.Parse(user_get.text);
 			if(func == "GetHat")
-			//	PlayerStatistic.instance.availableHatIndex = user_get.text;
+				PlayerStatistic.instance.availableHatIndex =  GetListFromString(user_get.text,3);
 			if(func == "GetGlass")
-			//	PlayerStatistic.instance.availableGlassIndex = user_get.text;
+				PlayerStatistic.instance.availableGlassIndex = GetListFromString(user_get.text,3);
 			if(func == "GetClothes")
-			//PlayerStatistic.instance.availableClothesIndex = user_get.text;
+				PlayerStatistic.instance.availableClothesIndex = GetListFromString(user_get.text,3);
 			if(func == "GetShoes")
-			//	PlayerStatistic.instance.availableShoesIndex = user_get.text;
+				PlayerStatistic.instance.availableShoesIndex = GetListFromString(user_get.text,3);
 			if(func == "GetCredits")
 				PlayerStatistic.instance.credit = int.Parse(user_get.text);
 		}
@@ -230,6 +306,20 @@ public class CloudDataController : MonoBehaviour
 		}
 	}
 
+
+	public List<int> GetListFromString(string input,int countDivider){
+		List<int> lisint = new List<int>();
+		int countElement;
+		string dataText = input;
+		countElement = dataText.Length/countDivider;
+		for(int i=0;i<countElement;i++){
+			string intTemp = dataText.Substring((dataText.Length)-3,3);
+			lisint.Add(int.Parse(intTemp));
+			if(dataText.Length != 3)
+				dataText = dataText.Remove((dataText.Length)-3,3);
+		}
+		return lisint;
+	}
 
 
 

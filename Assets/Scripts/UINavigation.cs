@@ -109,6 +109,9 @@ public class UINavigation : MonoBehaviour {
 		UIManager.instance.state = UIManager.State.MainMenu;
 		Application.LoadLevel("freeKick_menu");
 		aud.PlayOneShot(sfx);
+		GameObject bgm = GameObject.Find("audioBGM");
+		if(bgm)
+			Destroy(bgm);
 	}
 
 	public void GoRestart(){

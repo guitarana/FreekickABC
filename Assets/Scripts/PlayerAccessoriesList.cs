@@ -129,7 +129,7 @@ public class PlayerAccessoriesList : MonoBehaviour
 	public void SelectHatNext(){
 
 		aud.PlayOneShot(sfx);
-		Deactive(accessories,Type.Hat);
+	
 		hatIndex += 1;
 
 		if(hatIndex >= 100 + totalHat)
@@ -137,6 +137,7 @@ public class PlayerAccessoriesList : MonoBehaviour
 
 		currentHat = FindAccessories(hatIndex);
 		if(currentHat.available){
+			Deactive(accessories,Type.Hat);
 			currentHat.go.SetActive(true);
 			ActiveAcc();
 		}else{
@@ -149,7 +150,7 @@ public class PlayerAccessoriesList : MonoBehaviour
 
 		aud.PlayOneShot(sfx);
 
-		Deactive(accessories,Type.Hat);
+
 		hatIndex -= 1;
 
 		if(hatIndex <100)
@@ -157,6 +158,7 @@ public class PlayerAccessoriesList : MonoBehaviour
 		
 		currentHat = FindAccessories(hatIndex);
 		if(currentHat.available){
+			Deactive(accessories,Type.Hat);
 			currentHat.go.SetActive(true);
 			ActiveAcc();
 		}else{
@@ -170,7 +172,7 @@ public class PlayerAccessoriesList : MonoBehaviour
 		
 		aud.PlayOneShot(sfx);
 
-		Deactive(accessories,Type.Glass);
+
 		glassIndex += 1;
 		
 		if(glassIndex >= 200 + totalGlasses)
@@ -178,6 +180,7 @@ public class PlayerAccessoriesList : MonoBehaviour
 		
 		currentGlass = FindAccessories(glassIndex);
 		if(currentGlass.available){
+			Deactive(accessories,Type.Glass);
 			currentGlass.go.SetActive(true);
 			ActiveAcc();
 		}else{
@@ -190,7 +193,7 @@ public class PlayerAccessoriesList : MonoBehaviour
 		
 		aud.PlayOneShot(sfx);
 
-		Deactive(accessories,Type.Glass);
+
 		glassIndex -= 1;
 		
 		if(glassIndex <200)
@@ -198,6 +201,7 @@ public class PlayerAccessoriesList : MonoBehaviour
 			
 		currentGlass = FindAccessories(glassIndex);
 		if(currentGlass.available){
+			Deactive(accessories,Type.Glass);
 			currentGlass.go.SetActive(true);
 			ActiveAcc();
 		}else{
@@ -210,7 +214,7 @@ public class PlayerAccessoriesList : MonoBehaviour
 
 		aud.PlayOneShot(sfx);
 
-		Deactive(accessories,Type.Shoes);
+
 		shoesIndex += 1;
 		
 		if(shoesIndex >= 400 + totalShoes)
@@ -218,6 +222,7 @@ public class PlayerAccessoriesList : MonoBehaviour
 		
 		currentShoes = FindAccessories(shoesIndex);
 		if(currentShoes.available){
+			Deactive(accessories,Type.Shoes);
 			if(currentShoes.go.GetComponent<SkinnedMeshRenderer>())
 				currentShoes.go.GetComponent<SkinnedMeshRenderer>().enabled = true;
 			else
@@ -234,7 +239,7 @@ public class PlayerAccessoriesList : MonoBehaviour
 		
 		aud.PlayOneShot(sfx);
 
-		Deactive(accessories,Type.Shoes);
+
 		shoesIndex -= 1;
 		
 		if(shoesIndex <400)
@@ -242,6 +247,7 @@ public class PlayerAccessoriesList : MonoBehaviour
 			
 		currentShoes = FindAccessories(shoesIndex);
 		if(currentShoes.available){
+			Deactive(accessories,Type.Shoes);
 			if(currentShoes.go.GetComponent<SkinnedMeshRenderer>())
 				currentShoes.go.GetComponent<SkinnedMeshRenderer>().enabled = true;
 			else
@@ -257,7 +263,7 @@ public class PlayerAccessoriesList : MonoBehaviour
 	public void SelectClothesNext(){
 		aud.PlayOneShot(sfx);
 
-		Deactive(accessories,Type.Clothes);
+
 		clothesIndex += 1;
 		
 		if(clothesIndex >= 300 +totalClothes)
@@ -265,6 +271,7 @@ public class PlayerAccessoriesList : MonoBehaviour
 		
 		currentClothes = FindAccessories(clothesIndex);
 		if(currentClothes.available){
+			Deactive(accessories,Type.Clothes);
 			if(currentClothes.go.GetComponent<SkinnedMeshRenderer>())
 				currentClothes.go.GetComponent<SkinnedMeshRenderer>().enabled = true;
 			else
@@ -280,7 +287,7 @@ public class PlayerAccessoriesList : MonoBehaviour
 	public void SelectClothesPrev(){
 		aud.PlayOneShot(sfx);
 
-		Deactive(accessories,Type.Clothes);
+
 		clothesIndex -= 1;
 		
 		if(clothesIndex <300)
@@ -288,6 +295,7 @@ public class PlayerAccessoriesList : MonoBehaviour
 		
 		currentClothes = FindAccessories(clothesIndex);
 		if(currentClothes.available){
+			Deactive(accessories,Type.Clothes);
 			if(currentClothes.go.GetComponent<SkinnedMeshRenderer>())
 				currentClothes.go.GetComponent<SkinnedMeshRenderer>().enabled = true;
 			else

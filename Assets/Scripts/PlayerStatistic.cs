@@ -53,8 +53,8 @@ public class PlayerStatistic : MonoBehaviour
 	public int credit = 1000000;
 
 	//Player Game Stat
-	public int uniqueid = 242342354;
-	public string username = "Player";
+	public int uniqueid = 29;
+	public string username = "gghg";
 	public int globalLevel;
 	public int xpGain;
 	public int xpRemaining = 20;
@@ -80,12 +80,12 @@ public class PlayerStatistic : MonoBehaviour
 	public int bonus;
 	public int goalKeeperBlock;
 	public int chart;
-	public bool availableAllCostume = true;
+	public bool availableAllCostume = false;
 
 	// Use this for initialization
 	void Start ()
 	{
-
+		CloudDataController.instance.Create();
 		availableHatIndex.Add (100);
 		availableGlassIndex.Add (200);
 		availableShoesIndex.Add (400);

@@ -115,7 +115,10 @@ public class InGameUIManager : MonoBehaviour
 			if(UIManager.instance.state == UIManager.State.OneBall){
 			
 			}
-
+			GameObject bgm = GameObject.Find("audioBGM");
+			if(bgm)
+				Destroy(bgm);
+			CloudDataController.instance.SetStat();
 			PlayerStatistic.instance.SaveGame();
 			StartCoroutine(CloudDataController.instance.PostStats());
 			panelStartGame.SetActive(true);
@@ -188,6 +191,7 @@ public class InGameUIManager : MonoBehaviour
 	void DoWinGame(){
 		
 		if(substate == SubState.Init){
+			CloudDataController.instance.SetStat();
 			DisableAllPanel();
 			PlayerStatistic.instance.SaveGame();
 			panelWinGame.SetActive(true);
@@ -232,6 +236,7 @@ public class InGameUIManager : MonoBehaviour
 	void DoGameOver(){
 		
 		if(substate == SubState.Init){
+			CloudDataController.instance.SetStat();
 			DisableAllPanel();
 			PlayerStatistic.instance.SaveGame();
 			panelGameOver.SetActive(true);

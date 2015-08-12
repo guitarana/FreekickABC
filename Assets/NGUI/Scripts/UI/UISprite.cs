@@ -315,6 +315,9 @@ public class UISprite : UIBasicSprite
 	/// <summary>
 	/// Set the atlas sprite directly.
 	/// </summary>
+	public void SetSprite(UISpriteData sp){
+		SetAtlasSprite(sp);
+	}
 
 	protected void SetAtlasSprite (UISpriteData sp)
 	{
