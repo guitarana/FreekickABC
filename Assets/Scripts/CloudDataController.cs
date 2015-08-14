@@ -32,12 +32,12 @@ public class CloudDataController : MonoBehaviour
 
 
     private string secretKey = "freeKickABC"; // Edit this value and make sure it's the same as the one stored on the server
-    public string addScoreURL = "http://localhost/TestServerSide/addscore.php?"; //be sure to add a ? to your url
-    public string highscoreURL = "http://localhost/TestServerSide/display.php";
-	public string addStatsURL = "http://localhost/TestServerSide/addstats.php?";
-	public string setStatsURL = "http://localhost/TestServerSide/setstats.php?";
-	public string getStatsURL = "http://localhost/TestServerSide/getstats.php?";
-	public string getDataURL = "http://localhost/TestServerSide/getdata.php?";
+	public string addScoreURL = "http://guitarana.com/app/FreekickABC/addscore.php?"; //be sure to add a ? to your url
+	public string highscoreURL = "http://guitarana.com/app/FreekickABC/display.php";
+	public string addStatsURL = "http://guitarana.com/app/FreekickABC/addstats.php?";
+	public string setStatsURL = "http://guitarana.com/app/FreekickABC/setstats.php?";
+	public string getStatsURL = "http://guitarana.com/app/FreekickABC/getstats.php?";
+	public string getDataURL = "http://guitarana.com/app/FreekickABC/getdata.php?";
 	public void Create()
 	{
 		/* SHOULD BE EMPTY */
@@ -250,16 +250,16 @@ public class CloudDataController : MonoBehaviour
 		}
 
 		if(userExist){
-			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetName"));
-			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetLevel"));
-			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetXPGain"));
-			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetXPRemaining"));
-			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetHat"));
-			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetGlass"));
-			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetClothes"));
-			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetShoes"));
-			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetCredits"));
-			
+//			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetName"));
+//			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetLevel"));
+//			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetXPGain"));
+//			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetXPRemaining"));
+//			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetHat"));
+//			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetGlass"));
+//			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetClothes"));
+//			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetShoes"));
+//			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetCredits"));
+			StartCoroutine(GetUserData(PlayerStatistic.instance.uniqueid,"GetStat"));
 		}
 		
 		dataDownloaded = true;
@@ -275,29 +275,44 @@ public class CloudDataController : MonoBehaviour
 		if (user_get.error != null)
 		{
 			errorDownload = true;
-			print("There was an error getting the high score: " + user_get.error);
+			print("There was an error getting the data: " + user_get.error +" for " + getDataURL + "uniqueid=" +  userid + "&f=" + func);
 		}
 		else
 		{
 			dataCount +=1;
-			if(func == "GetName")
-				PlayerStatistic.instance.username = user_get.text;
-			if(func == "GetLevel")
-				PlayerStatistic.instance.globalLevel =int.Parse(user_get.text);
-			if(func == "GetXPGain")
-				PlayerStatistic.instance.globalXPGain = int.Parse(user_get.text);
-			if(func == "GetXPRemaining")
-				PlayerStatistic.instance.xpRemaining = int.Parse(user_get.text);
-			if(func == "GetHat")
-				PlayerStatistic.instance.availableHatIndex =  GetListFromString(user_get.text,3);
-			if(func == "GetGlass")
-				PlayerStatistic.instance.availableGlassIndex = GetListFromString(user_get.text,3);
-			if(func == "GetClothes")
-				PlayerStatistic.instance.availableClothesIndex = GetListFromString(user_get.text,3);
-			if(func == "GetShoes")
-				PlayerStatistic.instance.availableShoesIndex = GetListFromString(user_get.text,3);
-			if(func == "GetCredits")
-				PlayerStatistic.instance.credit = int.Parse(user_get.text);
+//			if(func == "GetName")
+//				PlayerStatistic.instance.username = user_get.text;
+//			if(func == "GetLevel")
+//				PlayerStatistic.instance.globalLevel =int.Parse(user_get.text);
+//			if(func == "GetXPGain")
+//				PlayerStatistic.instance.globalXPGain = int.Parse(user_get.text);
+//			if(func == "GetXPRemaining")
+//				PlayerStatistic.instance.xpRemaining = int.Parse(user_get.text);
+//			if(func == "GetHat")
+//				PlayerStatistic.instance.availableHatIndex =  GetListFromString(user_get.text,3);
+//			if(func == "GetGlass")
+//				PlayerStatistic.instance.availableGlassIndex = GetListFromString(user_get.text,3);
+//			if(func == "GetClothes")
+//				PlayerStatistic.instance.availableClothesIndex = GetListFromString(user_get.text,3);
+//			if(func == "GetShoes")
+//				PlayerStatistic.instance.availableShoesIndex = GetListFromString(user_get.text,3);
+//			if(func == "GetCredits")
+//				PlayerStatistic.instance.credit = int.Parse(user_get.text);
+			if(func == "GetStat"){
+				string s = user_get.text;
+				string[] values = s.Split(',');
+				PlayerStatistic.instance.username = values[0];
+				PlayerStatistic.instance.globalLevel =int.Parse(values[1]);
+				PlayerStatistic.instance.globalXPGain = int.Parse(values[2]);
+				PlayerStatistic.instance.xpRemaining = int.Parse(values[3]);
+				PlayerStatistic.instance.availableHatIndex =  GetListFromString(values[4],3);
+				PlayerStatistic.instance.availableGlassIndex = GetListFromString(values[5],3);
+				PlayerStatistic.instance.availableClothesIndex = GetListFromString(values[6],3);
+				PlayerStatistic.instance.availableShoesIndex = GetListFromString(values[7],3);
+				PlayerStatistic.instance.credit = int.Parse(values[8]);
+
+			}
+
 		}
 		
 		dataDownloaded = true;
