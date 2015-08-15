@@ -417,7 +417,7 @@ public class GameManager : MonoBehaviour {
 
 		keeper.aiState = GoalKeeperAI.AIState.Idle;
 		keeper.substate = GoalKeeperAI.SubState.Init;
-		keeper.transform.position = new Vector3(keeper.initPos.x + Random.Range(0,1),keeper.initPos.y,keeper.initPos.z +Random.Range(-2,2));
+		keeper.transform.position = new Vector3(keeper.initPos.x + Random.Range(0,1),keeper.initPos.y,keeper.initPos.z +Random.Range(-1,1));
 
 		block.totalBlocker = totalBlocker;
 		block.gameObject.transform.position = PlayerAvatar.instance.gameObject.transform.position;

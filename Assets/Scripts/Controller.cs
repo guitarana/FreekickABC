@@ -14,6 +14,8 @@ public class Controller : MonoBehaviour
 	public float forceValue;
 	public float sensitivity;
 	public GameObject ball;
+
+
 	// Use this for initialization
 	void Start () {
 		instance = this;
@@ -62,18 +64,18 @@ public class Controller : MonoBehaviour
 			}else if(GameState.instance.isShooting){
 				ball.GetComponent<Rigidbody> ().isKinematic = false; 
 				ball.GetComponent<Rigidbody> ().WakeUp ();
-				forceValue = 90;
+				forceValue =50;
 				ball.transform.rotation = Quaternion.Euler (new Vector3 (-GetLength ()*0.4f, -(GetAngle ()), 0)) * Quaternion.Euler(0, CameraManager.instance.angle, 0); //ROTATE THE BALL TO FACE THE DIRECTION OF THE SWIPE - LENGTH = Y, ANGLE = X
 				
 				ball.GetComponent<Rigidbody> ().AddRelativeForce (Vector3.forward * forceValue, ForceMode.Impulse); //NOW THE BALL IS FACING THE DIRECTION OF SWIPE, ADD FORWARD FORCE SIMPLY
-				ball.GetComponent<ConstantForce>().force = new Vector3(-forceValue/2F,forceValue*0.3f,0);
+				ball.GetComponent<ConstantForce>().force = new Vector3(-forceValue/4F ,forceValue*1f,0);
 				ball.GetComponent<ConstantForce> ().enabled = true;
 				GameState.instance.isFlyBall = true;
 				GameState.instance.isShooting = false;
 				GameState.instance.isAiming = false;
 			}
 			else{
-				ball.transform.Rotate(new Vector3(0,10,0));
+				ball.transform.Rotate(new Vector3(0,20,0));
 				if (GameState.instance.isGoal) {
 					ball.GetComponent<ConstantForce> ().enabled= false;
 				}
@@ -90,21 +92,21 @@ public class Controller : MonoBehaviour
 						mouseEndFlick = Input.mousePosition;
 						
 						switch (GetDirection2 ()) {
-						case "UP ":
-
-							ball.GetComponent<ConstantForce> ().force = new Vector3 (0, GetLength2 ()*sensitivity , 0);
-							break;
-						case "DOWN ":
-
-							ball.GetComponent<ConstantForce> ().force = new Vector3 (0, -GetLength2 ()*sensitivity /Screen.width, 0);
-							break;
+//						case "UP ":
+//
+//							ball.GetComponent<ConstantForce> ().force = new Vector3 (0, GetLength2 ()*sensitivity , 0);
+//							break;
+//						case "DOWN ":
+//
+//							ball.GetComponent<ConstantForce> ().force = new Vector3 (0, -GetLength2 ()*sensitivity, 0);
+//							break;
 						case "RIGHT ":
 
-							ball.GetComponent<ConstantForce> ().force = Quaternion.Euler(0, CameraManager.instance.angle/2, 0) * new Vector3 (0, 0, GetLength2 ()*sensitivity );
+							ball.GetComponent<ConstantForce> ().force = Quaternion.Euler(0, CameraManager.instance.angle/2, 0) * new Vector3 (0, 50, GetLength2 ()*sensitivity );
 							break;
 						case "LEFT ":
 						
-							ball.GetComponent<ConstantForce> ().force = Quaternion.Euler(0, CameraManager.instance.angle/2, 0) * new Vector3 (0, 0, -GetLength2 ()*sensitivity );
+							ball.GetComponent<ConstantForce> ().force = Quaternion.Euler(0, CameraManager.instance.angle/2, 0) * new Vector3 (0,50, -GetLength2 ()*sensitivity );
 							break;
 							
 							}

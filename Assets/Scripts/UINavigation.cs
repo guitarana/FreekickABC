@@ -88,7 +88,7 @@ public class UINavigation : MonoBehaviour {
 	}
 
 	public void GoStartGame(){
-		Time.timeScale = 1;
+		Time.timeScale = 0.6f;
 		GameManager.instance.Reset();
 		InGameUIManager.instance.inGameState = InGameUIManager.InGameState.BeginGame;
 		InGameUIManager.instance.substate = InGameUIManager.SubState.Init;
@@ -98,14 +98,14 @@ public class UINavigation : MonoBehaviour {
 
 	public void GoBeginGame(){
 		//GameManager.instance.Reset();
-		Time.timeScale = 1;
+		Time.timeScale = 0.6f;
 		InGameUIManager.instance.inGameState = InGameUIManager.InGameState.BeginGame;
 		InGameUIManager.instance.substate = InGameUIManager.SubState.Init;
 		aud.PlayOneShot(sfx);
 	}
 
 	public void GoHome(){
-		Time.timeScale = 1;
+		Time.timeScale = 0.6f;
 		UIManager.instance.state = UIManager.State.MainMenu;
 		Application.LoadLevel("freeKick_menu");
 		aud.PlayOneShot(sfx);
@@ -115,7 +115,7 @@ public class UINavigation : MonoBehaviour {
 	}
 
 	public void GoRestart(){
-		Time.timeScale = 1;
+		Time.timeScale = 0.6f;
 		GameManager.instance.score = 0;
 		GameManager.instance.timer = 0;
 		GameManager.instance.goalCounter = 0;

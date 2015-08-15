@@ -161,7 +161,8 @@ public class GoalKeeperAI : MonoBehaviour
 	void DoJumpRight(){
 		
 		if (substate == SubState.Init) {
-			transform.localScale = new Vector3(-3.748038f,3.748038f,3.748038f);
+			//transform.localScale = new Vector3(-3.748038f,3.748038f,3.748038f);
+			transform.localScale = new Vector3(-1.124411f,1.124411f,1.124411f);
 			transform.Translate(Vector3.right*1);
 			substate = SubState.Active;
 		}
@@ -182,7 +183,7 @@ public class GoalKeeperAI : MonoBehaviour
 	void DoJumpLeft(){
 		
 		if (substate == SubState.Init) {
-			transform.localScale = new Vector3(3.748038f,3.748038f,3.748038f);
+			transform.localScale = new Vector3(1.124411f,1.124411f,1.124411f);
 			transform.Translate(Vector3.left*1);
 			substate = SubState.Active;
 		}
@@ -227,15 +228,18 @@ public class GoalKeeperAI : MonoBehaviour
 	void UpdateAnimation(){
 		switch (aiState) {
 		case AIState.Idle :
-			transform.localScale = new Vector3(3.748038f,3.748038f,3.748038f);
+			transform.localScale = new Vector3(1.124411f,1.124411f,1.124411f);
+
 			anim.CrossFade("Idle",0);
 			break;
 		case AIState.Jockey :
-			transform.localScale = new Vector3(3.748038f,3.748038f,3.748038f);
+			transform.localScale = new Vector3(1.124411f,1.124411f,1.124411f);
+
 			anim.CrossFade("Idle");
 			break;
 		case AIState.Catch :
-			transform.localScale = new Vector3(3.748038f,3.748038f,3.748038f);
+			transform.localScale = new Vector3(1.124411f,1.124411f,1.124411f);
+
 			if(substate == SubState.Init){
 				if(ball.transform.position.y>1 && ball.transform.position.y <2)
 					anim.CrossFade("Catch",0.25f);

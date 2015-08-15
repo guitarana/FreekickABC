@@ -77,7 +77,7 @@ public class CameraManager : MonoBehaviour
 
 		} else {
 			if(!isStop){
-				transform.LookAt(GameManager.instance.goal.transform);
+			//	transform.LookAt(GameManager.instance.goal.transform);
 				//transform.position = GetDesiredPosition();
 				GetDesiredPosition2();
 				if (fov >= 60){

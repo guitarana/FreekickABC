@@ -30,7 +30,7 @@ public class PlayerAvatar : MonoBehaviour
 	public AudioClip shootSFX;
 	public AudioClip grassSFX;
 	private AudioSource audioSource;
-
+	public float animSpeed = 1.5f;
 	void Awake(){
 		instance = this;
 	}
@@ -41,6 +41,11 @@ public class PlayerAvatar : MonoBehaviour
 
 		anim = gameObject.GetComponent<Animation> ();
 		audioSource = gameObject.GetComponent<AudioSource> ();
+		anim["Shoot"].speed =animSpeed;
+		anim["idle"].speed =animSpeed;
+		anim["Seleb_berdiri"].speed =animSpeed;
+		anim["Seleb_tepuk tangan"].speed =animSpeed;
+		anim["Seleb_duduk"].speed =animSpeed;
 
 		aiState = AIState.Idle;
 		
@@ -100,7 +105,7 @@ public class PlayerAvatar : MonoBehaviour
 		
 		if (substate == SubState.Active) {
 			timer += Time.deltaTime;
-			if(timer >= anim.GetClip("Shoot").length -1.4f){
+			if(timer >= anim.GetClip("Shoot").length -1.7f){
 
 				audioSource.PlayOneShot(shootSFX);
 				audioSource.PlayOneShot(grassSFX);
@@ -219,22 +224,27 @@ public class PlayerAvatar : MonoBehaviour
 	void UpdateAnimation(){
 		switch (aiState) {
 		case AIState.Idle :
+			//anim["idle"].speed =2f;
 			anim.CrossFade("Idle",0.25f);
 			anim.clip = anim["Idle"].clip;
 			break;
 		case AIState.Shoot :
+
 			anim.CrossFade("Shoot",0.25f);
 			anim.clip = anim["Shoot"].clip;
 			break;
 		case AIState.Celeb1 :
+			//anim["Seleb_berdiri"].speed =2f;
 			anim.CrossFade("Seleb_berdiri",0.25f);
 			anim.clip = anim["Seleb_berdiri"].clip;
 			break;
 		case AIState.Celeb2 :
+			//anim["Seleb_tepuk"].speed =2f;
 			anim.CrossFade("Seleb_tepuk tangan",0.25f);
 			anim.clip = anim["Seleb_tepuk tangan"].clip;
 			break;
 		case AIState.Celeb3 :
+			//anim["Seleb_duduk"].speed =2f;
 			anim.CrossFade("Seleb_duduk",0.25f);
 			anim.clip = anim["Seleb_duduk"].clip;
 			break;
