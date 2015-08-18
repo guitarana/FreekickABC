@@ -4,6 +4,12 @@ using System.Collections;
 public class UINavigation : MonoBehaviour {
 	public AudioClip sfx;
 	public AudioSource aud;
+	public GameObject PanelMain;
+	public GameObject PanelPlay;
+	public GameObject PanelCustomize;
+	public GameObject PanelTutorial;
+
+
 	// Use this for initialization
 	void Start () {
 		aud = GetComponent<AudioSource>();
@@ -14,6 +20,14 @@ public class UINavigation : MonoBehaviour {
 	
 	}
 
+	public void ButtonPlay(){
+		NGUITools.SetActive(PanelMain,false);
+		NGUITools.SetActive(PanelPlay,true);
+	}
+	public void ButtonCustomize(){
+		NGUITools.SetActive(PanelMain,false);
+		NGUITools.SetActive(PanelCustomize,true);
+	}
 
 	public void StartGame(){
 		aud.PlayOneShot(sfx);
