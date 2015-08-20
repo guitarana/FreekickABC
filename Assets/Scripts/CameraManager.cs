@@ -66,7 +66,7 @@ public class CameraManager : MonoBehaviour
 			//transform.localPosition = Vector3.Lerp(transform.localPosition,new Vector3(target.localPosition.x, height, target.localPosition.z),Time.deltaTime);
 			parentCam.transform.position =Vector3.Lerp(parentCam.transform.localPosition,new Vector3(target.localPosition.x, height-5, target.localPosition.z),Time.deltaTime);
 
-			if (fov <= 90){
+			if (fov <= 80){
 				fov += Time.deltaTime*50;
 
 			}

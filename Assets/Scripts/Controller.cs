@@ -68,7 +68,9 @@ public class Controller : MonoBehaviour
 				ball.transform.rotation = Quaternion.Euler (new Vector3 (-GetLength ()*0.4f, -(GetAngle ()), 0)) * Quaternion.Euler(0, CameraManager.instance.angle, 0); //ROTATE THE BALL TO FACE THE DIRECTION OF THE SWIPE - LENGTH = Y, ANGLE = X
 				
 				ball.GetComponent<Rigidbody> ().AddRelativeForce (Vector3.forward * forceValue, ForceMode.Impulse); //NOW THE BALL IS FACING THE DIRECTION OF SWIPE, ADD FORWARD FORCE SIMPLY
-				ball.GetComponent<ConstantForce>().force = new Vector3(-forceValue/4F ,forceValue*1f,0);
+				//ball.GetComponent<ConstantForce>().force = new Vector3(-forceValue/1F ,forceValue*1f,0);
+				ball.GetComponent<ConstantForce>().force = new Vector3(-50,forceValue*0.8f,0);
+
 				ball.GetComponent<ConstantForce> ().enabled = true;
 				GameState.instance.isFlyBall = true;
 				GameState.instance.isShooting = false;
@@ -102,11 +104,13 @@ public class Controller : MonoBehaviour
 //							break;
 						case "RIGHT ":
 
-							ball.GetComponent<ConstantForce> ().force = Quaternion.Euler(0, CameraManager.instance.angle/2, 0) * new Vector3 (0, 50, GetLength2 ()*sensitivity );
+							//ball.GetComponent<ConstantForce> ().force = Quaternion.Euler(0, CameraManager.instance.angle/2, 0) * new Vector3 (0, 50, GetLength2 ()*sensitivity );
+							ball.GetComponent<ConstantForce> ().force = Quaternion.Euler(0, CameraManager.instance.angle/2, 0) * new Vector3 (0, 50, sensitivity );
+
 							break;
 						case "LEFT ":
-						
-							ball.GetComponent<ConstantForce> ().force = Quaternion.Euler(0, CameraManager.instance.angle/2, 0) * new Vector3 (0,50, -GetLength2 ()*sensitivity );
+							//ball.GetComponent<ConstantForce> ().force = Quaternion.Euler(0, CameraManager.instance.angle/2, 0) * new Vector3 (0,50, -GetLength2 ()*sensitivity );
+							ball.GetComponent<ConstantForce> ().force = Quaternion.Euler(0, CameraManager.instance.angle/2, 0) * new Vector3 (0,50, -sensitivity );
 							break;
 							
 							}

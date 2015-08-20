@@ -19,6 +19,6 @@ public class GoalOrientation : MonoBehaviour {
 			transform.LookAt(target.transform);
 		else
 			target = GameManager.instance.ball;
-		angle = transform.localEulerAngles.y-90;
+		angle = transform.localEulerAngles.y-92.5f;
 	}
 }

@@ -12,7 +12,8 @@ public class PlayerAvatar : MonoBehaviour
 		Shoot,
 		Celeb1,
 		Celeb2,
-		Celeb3
+		Celeb3,
+		IdleLocker
 	}
 	
 	public AIState aiState = AIState.None;
@@ -41,11 +42,12 @@ public class PlayerAvatar : MonoBehaviour
 
 		anim = gameObject.GetComponent<Animation> ();
 		audioSource = gameObject.GetComponent<AudioSource> ();
-		anim["Shoot"].speed =animSpeed;
+		anim["kick"].speed =animSpeed;
+		anim["before kick"].speed =animSpeed;
+		anim["selebrasi berdiri"].speed =animSpeed;
+		anim["selebrasi tepuk tangan"].speed =animSpeed;
+		anim["selebrasi duduk"].speed =animSpeed;
 		anim["idle"].speed =animSpeed;
-		anim["Seleb_berdiri"].speed =animSpeed;
-		anim["Seleb_tepuk tangan"].speed =animSpeed;
-		anim["Seleb_duduk"].speed =animSpeed;
 
 		aiState = AIState.Idle;
 		
@@ -105,7 +107,7 @@ public class PlayerAvatar : MonoBehaviour
 		
 		if (substate == SubState.Active) {
 			timer += Time.deltaTime;
-			if(timer >= anim.GetClip("Shoot").length -1.7f){
+			if(timer >= anim.GetClip("kick").length -1f){
 
 				audioSource.PlayOneShot(shootSFX);
 				audioSource.PlayOneShot(grassSFX);
@@ -196,6 +198,26 @@ public class PlayerAvatar : MonoBehaviour
 		}
 	}
 
+	void DoIdleLocker(){
+		
+		if (substate == SubState.Init) {
+			
+			substate = SubState.Active;
+		}
+		
+		if (substate == SubState.Active) { 
+			
+		}
+		
+		if (substate == SubState.Deactive) {
+			
+		}
+		
+		if (substate == SubState.Finish) {
+			
+		}
+	}
+
 	
 	void UpdateState(){
 		switch (aiState) {
@@ -217,6 +239,9 @@ public class PlayerAvatar : MonoBehaviour
 		case AIState.Celeb3:
 			DoCeleb3();
 			break;
+		case AIState.IdleLocker:
+			DoIdleLocker();
+			break;
 		}
 	}
 	
@@ -224,29 +249,34 @@ public class PlayerAvatar : MonoBehaviour
 	void UpdateAnimation(){
 		switch (aiState) {
 		case AIState.Idle :
-			//anim["idle"].speed =2f;
-			anim.CrossFade("Idle",0.25f);
-			anim.clip = anim["Idle"].clip;
+			//anim["before kick"].speed =2f;
+			anim.CrossFade("before kick",0.25f);
+			anim.clip = anim["before kick"].clip;
 			break;
 		case AIState.Shoot :
 
-			anim.CrossFade("Shoot",0.25f);
-			anim.clip = anim["Shoot"].clip;
+			anim.CrossFade("kick",0.25f);
+			anim.clip = anim["kick"].clip;
 			break;
 		case AIState.Celeb1 :
-			//anim["Seleb_berdiri"].speed =2f;
-			anim.CrossFade("Seleb_berdiri",0.25f);
-			anim.clip = anim["Seleb_berdiri"].clip;
+			//anim["selebrasi berdiri"].speed =2f;
+			anim.CrossFade("selebrasi berdiri",0.25f);
+			anim.clip = anim["selebrasi berdiri"].clip;
 			break;
 		case AIState.Celeb2 :
 			//anim["Seleb_tepuk"].speed =2f;
-			anim.CrossFade("Seleb_tepuk tangan",0.25f);
-			anim.clip = anim["Seleb_tepuk tangan"].clip;
+			anim.CrossFade("selebrasi tepuk tangan",0.25f);
+			anim.clip = anim["selebrasi tepuk tangan"].clip;
 			break;
 		case AIState.Celeb3 :
-			//anim["Seleb_duduk"].speed =2f;
-			anim.CrossFade("Seleb_duduk",0.25f);
-			anim.clip = anim["Seleb_duduk"].clip;
+			//anim["selebrasi duduk"].speed =2f;
+			anim.CrossFade("selebrasi duduk",0.25f);
+			anim.clip = anim["selebrasi duduk"].clip;
+			break;
+		case AIState.IdleLocker :
+			//anim["selebrasi duduk"].speed =2f;
+			anim.CrossFade("idle",0.25f);
+			anim.clip = anim["idle"].clip;
 			break;
 		
 			
@@ -258,7 +288,9 @@ public class PlayerAvatar : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		if(InGameUIManager.instance.inGameState == InGameUIManager.InGameState.PauseGame || InGameUIManager.instance.inGameState == InGameUIManager.InGameState.GameOver) return;
+		if(InGameUIManager.instance){
+			if(InGameUIManager.instance.inGameState == InGameUIManager.InGameState.PauseGame || InGameUIManager.instance.inGameState == InGameUIManager.InGameState.GameOver) return;
+		}
 		UpdateState ();
 		UpdateAnimation ();
 	}
