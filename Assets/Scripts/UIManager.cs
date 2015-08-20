@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+//test edit : erwin
 public class UIManager : MonoBehaviour {
 
 	public static UIManager _instance;

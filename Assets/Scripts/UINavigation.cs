@@ -3,10 +3,19 @@ using System.Collections;
 
 public class UINavigation : MonoBehaviour {
 	public AudioClip sfx;
-	public AudioSource aud;
+	public GameObject PanelMain;
+	public GameObject PanelPlay;
+	public GameObject PanelCustomize;
+	public GameObject PanelTutorial;
+	public GameObject PanelLanguage;
+
+
 	// Use this for initialization
 	void Start () {
-		aud = GetComponent<AudioSource>();
+		NGUITools.SetActive(PanelMain,true);
+		NGUITools.SetActive(PanelPlay,false);
+		NGUITools.SetActive(PanelCustomize,false);
+		NGUITools.SetActive(PanelLanguage,false);
 	}
 	
 	// Update is called once per frame
@@ -14,9 +23,56 @@ public class UINavigation : MonoBehaviour {
 	
 	}
 
+	public void ButtonPlay(){
+		NGUITools.SetActive(PanelMain,false);
+		NGUITools.SetActive(PanelPlay,true);
+	}
+
+	public void ButtonPlay_Back(){
+		NGUITools.SetActive(PanelMain,true);
+		NGUITools.SetActive(PanelPlay,false);
+	}
+
+
+
+	public void ButtonCustomize(){
+		NGUITools.SetActive(PanelMain,false);
+		NGUITools.SetActive(PanelCustomize,true);
+	}
+
+	public void ButtonCustomize_Back(){
+		NGUITools.SetActive(PanelMain,true);
+		NGUITools.SetActive(PanelCustomize,false);
+	}
+
+	public void ButtonLanguage(){
+		NGUITools.SetActive(PanelCustomize,false);
+		NGUITools.SetActive(PanelLanguage,true);
+	}
+	
+	public void ButtonLanguage_Back(){
+		NGUITools.SetActive(PanelCustomize,true);
+		NGUITools.SetActive(PanelLanguage,false);
+	}
+
+	public void ButtonEnglish(){
+		NGUITools.SetActive(PanelMain,false);
+		NGUITools.SetActive(PanelLanguage,true);
+		Localization.language="English";
+	}
+
+	public void ButtonIndonesia(){
+		NGUITools.SetActive(PanelMain,false);
+		NGUITools.SetActive(PanelLanguage,true);
+		Localization.language="Indonesia";
+	}
+	public void ButtonSunda(){
+		NGUITools.SetActive(PanelMain,false);
+		NGUITools.SetActive(PanelLanguage,true);
+		Localization.language="Sunda";
+	}
 
 	public void StartGame(){
-		aud.PlayOneShot(sfx);
 		GameObject go = GameObject.Find ("audioBGM");
 		StartCoroutine(IEStartGame());
 		Destroy(go);
@@ -28,7 +84,6 @@ public class UINavigation : MonoBehaviour {
 	}
 
 	public void GoArcade(){
-		aud.PlayOneShot(sfx);
 		UIManager.instance.state = UIManager.State.Arcade;
 		StartCoroutine(IEGoGame());
 	}
@@ -39,21 +94,16 @@ public class UINavigation : MonoBehaviour {
 	}
 	
 	public void GoTimeAttack(){
-		aud.PlayOneShot(sfx);
 		UIManager.instance.state = UIManager.State.TimeAttack;
 		StartCoroutine(IEGoGame());
 	}
-
-
 	
 	public void GoOneBall(){
-		aud.PlayOneShot(sfx);
 		UIManager.instance.state = UIManager.State.OneBall;
 		StartCoroutine(IEGoGame());
 	}
 	
 	public void GoShop(){
-		aud.PlayOneShot(sfx);
 		UIManager.instance.state = UIManager.State.Shop;
 		StartCoroutine(IEGoShop());
 	}
@@ -66,7 +116,6 @@ public class UINavigation : MonoBehaviour {
 	
 	public void GoTutorial(){
 		UIManager.instance.state = UIManager.State.Tutorial;
-		aud.PlayOneShot(sfx);
 		StartCoroutine(IEGoTut());
 	}
 
@@ -77,7 +126,6 @@ public class UINavigation : MonoBehaviour {
 
 	
 	public void GoExit(){
-		aud.PlayOneShot(sfx);
 		StartCoroutine(IEGoExit());
 
 	}
@@ -92,7 +140,6 @@ public class UINavigation : MonoBehaviour {
 		GameManager.instance.Reset();
 		InGameUIManager.instance.inGameState = InGameUIManager.InGameState.BeginGame;
 		InGameUIManager.instance.substate = InGameUIManager.SubState.Init;
-		aud.PlayOneShot(sfx);
 
 	}
 
@@ -101,14 +148,12 @@ public class UINavigation : MonoBehaviour {
 		Time.timeScale = 0.6f;
 		InGameUIManager.instance.inGameState = InGameUIManager.InGameState.BeginGame;
 		InGameUIManager.instance.substate = InGameUIManager.SubState.Init;
-		aud.PlayOneShot(sfx);
 	}
 
 	public void GoHome(){
 		Time.timeScale = 0.6f;
 		UIManager.instance.state = UIManager.State.MainMenu;
 		Application.LoadLevel("freeKick_menu");
-		aud.PlayOneShot(sfx);
 		GameObject bgm = GameObject.Find("audioBGM");
 		if(bgm)
 			Destroy(bgm);
@@ -122,14 +167,12 @@ public class UINavigation : MonoBehaviour {
 		GameManager.instance.Reset();
 		InGameUIManager.instance.inGameState = InGameUIManager.InGameState.BeginGame;
 		InGameUIManager.instance.substate = InGameUIManager.SubState.Init;
-		aud.PlayOneShot(sfx);
 	}
 
 	public void GoPause(){
 		Time.timeScale = 0;
 		InGameUIManager.instance.inGameState = InGameUIManager.InGameState.PauseGame;
 		InGameUIManager.instance.substate = InGameUIManager.SubState.Init;
-		aud.PlayOneShot(sfx);
 	}
 
 }
