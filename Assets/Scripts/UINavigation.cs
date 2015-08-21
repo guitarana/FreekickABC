@@ -85,6 +85,10 @@ public class UINavigation : MonoBehaviour {
 
 	public void GoArcade(){
 		UIManager.instance.state = UIManager.State.Arcade;
+		StartCoroutine(IEStartGame());
+	}
+
+	public void GoLocker(){
 		StartCoroutine(IEGoGame());
 	}
 
@@ -95,12 +99,12 @@ public class UINavigation : MonoBehaviour {
 	
 	public void GoTimeAttack(){
 		UIManager.instance.state = UIManager.State.TimeAttack;
-		StartCoroutine(IEGoGame());
+		StartCoroutine(IEStartGame());
 	}
 	
 	public void GoOneBall(){
 		UIManager.instance.state = UIManager.State.OneBall;
-		StartCoroutine(IEGoGame());
+		StartCoroutine(IEStartGame());
 	}
 	
 	public void GoShop(){

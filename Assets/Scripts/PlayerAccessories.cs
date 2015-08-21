@@ -23,18 +23,18 @@ public class PlayerAccessories : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		hatIndex = pl.hatIndex;
-		glassIndex = pl.glassIndex;
-		shoesIndex = pl.shoesIndex;
-		clothesIndex = pl.clothesIndex;
+		hatIndex = PlayerStatistic.instance.hatIndex;
+		glassIndex = PlayerStatistic.instance.glassIndex;
+		shoesIndex = PlayerStatistic.instance.shoesIndex;
+		clothesIndex = PlayerStatistic.instance.clothesIndex;
 		if(pl.currentHat!=null)
-			hatName = pl.currentHat.name.ToString();
+			hatName = pl.currentHat.Value.name.ToString();
 		if(pl.currentGlass!=null)
-			glassName = pl.currentGlass.name.ToString();
+			glassName = pl.currentGlass.Value.name.ToString();
 		if(pl.currentShoes!=null)
-			shoesName = pl.currentShoes.name.ToString();
+			shoesName = pl.currentShoes.Value.name.ToString();
 		if(pl.currentShoes!=null)
-			clothesName = pl.currentClothes.name.ToString();
+			clothesName = pl.currentClothes.Value.name.ToString();
 	}
 	
 }

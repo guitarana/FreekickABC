@@ -24,15 +24,20 @@ public class PlayerAccessoriesList : MonoBehaviour
 
 	public List<Accessories> accessories= new List<Accessories>(1);
 
+	public LinkedList<Accessories> linkedHats;
+	public LinkedList<Accessories> linkedGlass;
+	public LinkedList<Accessories> linkedShoes;
+	public LinkedList<Accessories> linkedClothes;
+
 	public Accessories[] hats ;
 	public Accessories[] glass;
 	public Accessories[] shoes;
 	public Accessories[] clothes;
 
-	public Accessories currentHat;
-	public Accessories currentGlass;
-	public Accessories currentShoes;
-	public Accessories currentClothes;
+	public LinkedListNode<Accessories> currentHat;
+	public LinkedListNode<Accessories> currentGlass;
+	public LinkedListNode<Accessories> currentShoes;
+	public LinkedListNode<Accessories> currentClothes;
 
 	public int hatIndex = 100;
 	public int glassIndex = 200;
@@ -49,6 +54,23 @@ public class PlayerAccessoriesList : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
+
+		linkedHats = new LinkedList<Accessories>();
+		currentHat = new LinkedListNode<Accessories>(FindAccessories(100));
+		linkedHats.AddFirst(currentHat);
+
+		linkedGlass = new LinkedList<Accessories>();
+		currentGlass = new LinkedListNode<Accessories>(FindAccessories(200));
+		linkedGlass.AddFirst(currentGlass);
+
+		linkedShoes = new LinkedList<Accessories>();
+		currentShoes = new LinkedListNode<Accessories>(FindAccessories(400));
+		linkedShoes.AddFirst(currentShoes);
+
+		linkedClothes = new LinkedList<Accessories>();
+		currentClothes = new LinkedListNode<Accessories>(FindAccessories(300));
+		linkedClothes.AddFirst(currentClothes);
+
 		aud = GetComponent<AudioSource>();
 		sfx = aud.clip;
 		AddHat();
@@ -63,24 +85,20 @@ public class PlayerAccessoriesList : MonoBehaviour
 		glassIndex = PlayerStatistic.instance.glassIndex;
 		shoesIndex = PlayerStatistic.instance.shoesIndex;
 		clothesIndex = PlayerStatistic.instance.clothesIndex;
+	
+		AddListToLinkedList(accessories);
 
-		currentHat = FindAccessories(hatIndex);
-		currentHat.go.SetActive(true);
+		currentHat = FindLinkedListNode(linkedHats,hatIndex);
+		ActivateItem(currentHat.Value);
 
-		currentGlass = FindAccessories(glassIndex);
-		currentGlass.go.SetActive(true);
+		currentGlass = FindLinkedListNode(linkedGlass,glassIndex);
+		ActivateItem(currentGlass.Value);
 
-		currentShoes = FindAccessories(shoesIndex);
-		if(currentShoes.go.GetComponent<SkinnedMeshRenderer>())
-			currentShoes.go.GetComponent<SkinnedMeshRenderer>().enabled = true;
-		else
-			currentShoes.go.SetActive(true);
+		currentShoes = FindLinkedListNode(linkedShoes,shoesIndex);
+		ActivateItem(currentShoes.Value);
 
-		currentClothes = FindAccessories(clothesIndex);
-		if(currentClothes.go.GetComponent<SkinnedMeshRenderer>())
-			currentClothes.go.GetComponent<SkinnedMeshRenderer>().enabled = true;
-		else
-			currentClothes.go.SetActive(true);
+		currentClothes = FindLinkedListNode(linkedClothes,clothesIndex);
+		ActivateItem(currentClothes.Value);
 
 	}
 
@@ -129,183 +147,113 @@ public class PlayerAccessoriesList : MonoBehaviour
 	public void SelectHatNext(){
 
 		aud.PlayOneShot(sfx);
+		Deactive(accessories,Type.Hat);
+		if(currentHat == linkedHats.Last)
+			currentHat = linkedHats.First;
+		else
+			currentHat = currentHat.Next;
 	
-		hatIndex += 1;
+		ActivateItem(currentHat.Value);
+		PlayerStatistic.instance.hatIndex = currentHat.Value.index;
 
-		if(hatIndex >= 100 + totalHat)
-			hatIndex = 100;
-
-		currentHat = FindAccessories(hatIndex);
-		if(currentHat.available){
-			Deactive(accessories,Type.Hat);
-			currentHat.go.SetActive(true);
-			ActiveAcc();
-		}else{
-			hatIndex += 1;
-			SelectHatNext();
-		}
 	}
 
 	public void SelectHatPrev(){
 
 		aud.PlayOneShot(sfx);
+		Deactive(accessories,Type.Hat);
+		if(currentHat == linkedHats.First)
+			currentHat = linkedHats.Last;
+		else
+			currentHat = currentHat.Previous;
 
+		ActivateItem(currentHat.Value);
+		PlayerStatistic.instance.hatIndex = currentHat.Value.index;
 
-		hatIndex -= 1;
-
-		if(hatIndex <100)
-			hatIndex = 100 + totalHat-1;
-		
-		currentHat = FindAccessories(hatIndex);
-		if(currentHat.available){
-			Deactive(accessories,Type.Hat);
-			currentHat.go.SetActive(true);
-			ActiveAcc();
-		}else{
-			hatIndex -= 1;
-			SelectHatPrev();
-		}
-		//}
 	}
 
 	public void SelectGlassNext(){
 		
 		aud.PlayOneShot(sfx);
-
-
-		glassIndex += 1;
+		Deactive(accessories,Type.Glass);
+		if(currentGlass == linkedGlass.Last)
+			currentGlass = linkedGlass.First;
+		else
+			currentGlass = currentGlass.Next;
 		
-		if(glassIndex >= 200 + totalGlasses)
-			glassIndex = 200;
-		
-		currentGlass = FindAccessories(glassIndex);
-		if(currentGlass.available){
-			Deactive(accessories,Type.Glass);
-			currentGlass.go.SetActive(true);
-			ActiveAcc();
-		}else{
-			glassIndex += 1;
-			SelectGlassNext();
-		}
+		ActivateItem(currentGlass.Value);
+		PlayerStatistic.instance.glassIndex = currentGlass.Value.index;
+
 	}
 	
 	public void SelectGlassPrev(){
 		
 		aud.PlayOneShot(sfx);
-
-
-		glassIndex -= 1;
+		Deactive(accessories,Type.Glass);
+		if(currentGlass == linkedGlass.First)
+			currentGlass = linkedGlass.Last;
+		else
+			currentGlass = currentGlass.Previous;
 		
-		if(glassIndex <200)
-			glassIndex = 200 + totalGlasses-1;
-			
-		currentGlass = FindAccessories(glassIndex);
-		if(currentGlass.available){
-			Deactive(accessories,Type.Glass);
-			currentGlass.go.SetActive(true);
-			ActiveAcc();
-		}else{
-			glassIndex -= 1;
-			SelectGlassPrev();
-		}
+		ActivateItem(currentGlass.Value);
+		PlayerStatistic.instance.glassIndex = currentGlass.Value.index;
+		
 	}
 
 	public void SelectShoesNext(){
-
+		
 		aud.PlayOneShot(sfx);
-
-
-		shoesIndex += 1;
+		Deactive(accessories,Type.Shoes);
+		if(currentShoes == linkedShoes.Last)
+			currentShoes = linkedShoes.First;
+		else
+			currentShoes = currentShoes.Next;
 		
-		if(shoesIndex >= 400 + totalShoes)
-			shoesIndex = 400;
+		ActivateItem(currentShoes.Value);
+		PlayerStatistic.instance.shoesIndex = currentShoes.Value.index;
 		
-		currentShoes = FindAccessories(shoesIndex);
-		if(currentShoes.available){
-			Deactive(accessories,Type.Shoes);
-			if(currentShoes.go.GetComponent<SkinnedMeshRenderer>())
-				currentShoes.go.GetComponent<SkinnedMeshRenderer>().enabled = true;
-			else
-				currentShoes.go.SetActive(true);
-
-			ActiveAcc();
-		}else{
-			shoesIndex += 1;
-			SelectShoesNext();
-		}
 	}
 	
 	public void SelectShoesPrev(){
 		
 		aud.PlayOneShot(sfx);
-
-
-		shoesIndex -= 1;
+		Deactive(accessories,Type.Shoes);
+		if(currentShoes == linkedShoes.First)
+			currentShoes = linkedShoes.Last;
+		else
+			currentShoes = currentShoes.Previous;
 		
-		if(shoesIndex <400)
-			shoesIndex = 400 + totalShoes-1;
-			
-		currentShoes = FindAccessories(shoesIndex);
-		if(currentShoes.available){
-			Deactive(accessories,Type.Shoes);
-			if(currentShoes.go.GetComponent<SkinnedMeshRenderer>())
-				currentShoes.go.GetComponent<SkinnedMeshRenderer>().enabled = true;
-			else
-				currentShoes.go.SetActive(true);
-			
-			ActiveAcc();
-		}else{
-			shoesIndex -= 1;
-			SelectShoesPrev();
-		}
+		ActivateItem(currentShoes.Value);
+		PlayerStatistic.instance.shoesIndex = currentShoes.Value.index;
+		
 	}
 
 	public void SelectClothesNext(){
+		
 		aud.PlayOneShot(sfx);
-
-
-		clothesIndex += 1;
+		Deactive(accessories,Type.Clothes);
+		if(currentClothes == linkedClothes.Last)
+			currentClothes = linkedClothes.First;
+		else
+			currentClothes = currentClothes.Next;
 		
-		if(clothesIndex >= 300 +totalClothes)
-			clothesIndex = 300;
+		ActivateItem(currentClothes.Value);
+		PlayerStatistic.instance.clothesIndex = currentClothes.Value.index;
 		
-		currentClothes = FindAccessories(clothesIndex);
-		if(currentClothes.available){
-			Deactive(accessories,Type.Clothes);
-			if(currentClothes.go.GetComponent<SkinnedMeshRenderer>())
-				currentClothes.go.GetComponent<SkinnedMeshRenderer>().enabled = true;
-			else
-				currentClothes.go.SetActive(true);
-			
-			ActiveAcc();
-		}else{
-			clothesIndex += 1;
-			SelectClothesNext();
-		}
 	}
 	
 	public void SelectClothesPrev(){
+		
 		aud.PlayOneShot(sfx);
-
-
-		clothesIndex -= 1;
+		Deactive(accessories,Type.Clothes);
+		if(currentClothes == linkedClothes.First)
+			currentClothes = linkedClothes.Last;
+		else
+			currentClothes = currentClothes.Previous;
 		
-		if(clothesIndex <300)
-			clothesIndex = 300 +totalClothes-1;
+		ActivateItem(currentClothes.Value);
+		PlayerStatistic.instance.clothesIndex = currentClothes.Value.index;
 		
-		currentClothes = FindAccessories(clothesIndex);
-		if(currentClothes.available){
-			Deactive(accessories,Type.Clothes);
-			if(currentClothes.go.GetComponent<SkinnedMeshRenderer>())
-				currentClothes.go.GetComponent<SkinnedMeshRenderer>().enabled = true;
-			else
-				currentClothes.go.SetActive(true);
-			
-			ActiveAcc();
-		}else{
-			clothesIndex -= 1;
-			SelectClothesPrev();
-		}
 	}
 
 
@@ -390,6 +338,40 @@ public class PlayerAccessoriesList : MonoBehaviour
 			return null;
 		}
 		return null;
+	}
+
+	public void AddListToLinkedList(List<Accessories> list){
+		foreach(Accessories acc in list){
+
+
+			if(acc.index.ToString().StartsWith("1") && !acc.index.ToString().EndsWith("0")){
+				if(PlayerStatistic.instance.availableHatIndex.Contains(acc.index))
+					linkedHats.AddLast(acc);
+			}
+			if(acc.index.ToString().StartsWith("2") && !acc.index.ToString().EndsWith("0")){
+				if(PlayerStatistic.instance.availableGlassIndex.Contains(acc.index))
+					linkedGlass.AddLast(acc);
+			}
+			if(acc.index.ToString().StartsWith("3") && !acc.index.ToString().EndsWith("0")){
+				if(PlayerStatistic.instance.availableClothesIndex.Contains(acc.index))
+					linkedClothes.AddLast(acc);
+			}
+			if(acc.index.ToString().StartsWith("4") && !acc.index.ToString().EndsWith("0")){
+				if(PlayerStatistic.instance.availableShoesIndex.Contains(acc.index))
+					linkedShoes.AddLast(acc);
+			}
+		}
+	}
+
+	public LinkedListNode<Accessories> FindLinkedListNode(LinkedList<Accessories> acc,int index){
+		return acc.Find(FindAccessories(index));
+	}
+
+	public void ActivateItem(PlayerAccessoriesList.Accessories acc){
+		if(acc.go.GetComponent<SkinnedMeshRenderer>())
+			acc.go.GetComponent<SkinnedMeshRenderer>().enabled = true;
+		else
+			acc.go.SetActive(true);
 	}
 }
 

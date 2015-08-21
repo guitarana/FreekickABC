@@ -49,14 +49,16 @@ public class PlayerAvatar : MonoBehaviour
 		anim["selebrasi duduk"].speed =animSpeed;
 		anim["idle"].speed =animSpeed;
 
-		aiState = AIState.Idle;
-		
+		if(GameState.instance)
+			aiState = AIState.Idle;
+		else
+			aiState = AIState.IdleLocker;
 	}
 	
 	void DoNone(){
 		
 		if(substate == SubState.Init){
-			gameObject.SetActive(false);
+			//gameObject.SetActive(false);
 		}
 		
 		if(substate == SubState.Active){

@@ -53,8 +53,8 @@ public class PlayerStatistic : MonoBehaviour
 	public int credit = 1000000;
 
 	//Player Game Stat
-	public int uniqueid = 15;
-	public string username = "testhp";
+	public int uniqueid = 16;
+	public string username = "Marjuki";
 	public int globalLevel;
 	public int xpGain;
 	public int xpRemaining = 20;
@@ -90,6 +90,9 @@ public class PlayerStatistic : MonoBehaviour
 		availableGlassIndex.Add (200);
 		availableShoesIndex.Add (400);
 		availableClothesIndex.Add (300);
+		availableHatIndex.Add (106);
+		availableHatIndex.Add (107);
+
 		if(availableAllCostume){
 			for(int i=101;i<=105;i++){
 				availableHatIndex.Add(i);
