@@ -53,7 +53,7 @@ public class PlayerStatistic : MonoBehaviour
 	public int credit = 1000000;
 
 	//Player Game Stat
-	public int uniqueid = 16;
+	public int uniqueid = 17;
 	public string username = "Marjuki";
 	public int globalLevel;
 	public int xpGain;

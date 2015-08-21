@@ -310,7 +310,7 @@ public class GameManager : MonoBehaviour {
 		if(gameMode == GameMode.OneBall)
 			InGameUIManager.instance.timeText.text  = Mathf.RoundToInt(maxTime-timer).ToString();
 
-		InGameUIManager.instance.distanceText.text = ((int)(goalDistance)-37).ToString();
+		InGameUIManager.instance.distanceText.text = ((int)(goalDistance)-5).ToString();
 
 		InGameUIManager.instance.goalText.text  = goalCounter.ToString();
 		InGameUIManager.instance.startLevelText        .text = PlayerStatistic.instance.chart.ToString();
